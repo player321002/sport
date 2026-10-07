@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FitLife — Sog‘liq va Sport</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root{color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{background:#020617;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+.rv{opacity:0;transform:translateY(24px);transition:.7s}
+.rv.in{opacity:1;transform:none}
+.glass{background:rgba(15,23,42,.7);backdrop-filter:blur(12px)}
+.bar{transition:width .6s cubic-bezier(.4,0,.2,1)}
+.pop{animation:pop .25s ease}
+@keyframes pop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+@keyframes fl{50%{transform:translateY(-8px)}}
+.fl{animation:fl 4s ease-in-out infinite}
+</style>
+</head>
+<body class="text-white">
+
+<!-- Navbar -->
+<header id="hd" class="fixed top-0 inset-x-0 z-40 transition" style="padding-top:env(safe-area-inset-top,0px)">
+ <nav class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+  <a href="#top" class="text-2xl font-bold">Fit<span class="text-green-400">Life</span></a>
+  <div class="hidden md:flex gap-8 text-gray-300" id="links">
+   <a href="#top" class="hover:text-green-400 transition">Bosh sahifa</a>
+   <a href="#sport" class="hover:text-green-400 transition">Sport</a>
+   <a href="#bmi" class="hover:text-green-400 transition">BMI</a>
+   <a href="#tips" class="hover:text-green-400 transition">Maslahatlar</a>
+  </div>
+  <div class="flex items-center gap-3">
+   <div id="auth" class="flex items-center gap-2"></div>
+   <button id="burger" class="md:hidden w-10 h-10 rounded-xl border border-white/15 text-xl" aria-label="Menyu">☰</button>
+  </div>
+ </nav>
+ <div id="mob" class="hidden md:hidden glass border-t border-white/10 px-6 py-4 space-y-3 text-gray-200">
+  <a href="#top" class="block">Bosh sahifa</a><a href="#sport" class="block">Sport</a><a href="#bmi" class="block">BMI</a><a href="#tips" class="block">Maslahatlar</a>
+ </div>
+</header>
+
+<main id="top">
+<!-- Hero -->
+<section class="max-w-7xl mx-auto px-6 pt-32 pb-20 grid lg:grid-cols-2 gap-14 items-center">
+ <div class="rv">
+  <span class="inline-block bg-green-400/10 text-green-400 px-4 py-2 rounded-full text-sm mb-6">Sog‘lom hayot — yaxshi kelajak</span>
+  <h1 class="text-5xl md:text-6xl font-bold leading-tight">Sog‘lom tana, <span class="bg-gradient-to-r from-green-400 to-cyan-400 bg-clip-text text-transparent">kuchli hayot.</span></h1>
+  <p class="text-gray-400 text-lg mt-6 max-w-xl">Sport, to‘g‘ri ovqatlanish va yaxshi odatlar orqali o‘zingizni yanada yaxshi his qiling. Kunlik faolligingizni o‘ng tomonda kuzating.</p>
+  <div class="flex flex-wrap gap-4 mt-8">
+   <a href="#sport" class="bg-green-400 text-slate-950 px-7 py-3 rounded-xl font-semibold hover:bg-green-300 hover:-translate-y-0.5 transition">Sportni boshlash</a>
+   <a href="#tips" class="border border-white/20 px-7 py-3 rounded-xl font-semibold hover:bg-white/10 transition">Maslahatlarni ko‘rish</a>
+  </div>
+ </div>
+
+ <div class="rv fl">
+  <div class="bg-gradient-to-br from-green-400/20 to-blue-500/20 rounded-3xl p-6 md:p-8">
+   <div class="bg-slate-900 rounded-2xl p-6 md:p-8 border border-white/10">
+    <div class="flex justify-between items-center mb-6">
+     <div><p class="text-gray-400 text-sm">Bugungi faollik</p>
+      <h2 class="text-4xl font-bold mt-1" id="stV">0</h2><p class="text-green-400 text-sm">qadam / 10 000</p></div>
+     <div class="w-14 h-14 bg-green-400/10 rounded-2xl flex items-center justify-center text-2xl">🏃</div>
+    </div>
+    <div class="space-y-5">
+     <div><div class="flex justify-between text-sm mb-2"><span class="text-gray-400">Qadam</span><span id="stP"></span></div>
+      <div class="h-2 bg-slate-800 rounded-full"><div id="stB" class="bar h-2 bg-green-400 rounded-full" style="width:0"></div></div>
+      <button data-a="step" class="mt-2 text-xs px-3 py-1.5 rounded-lg bg-green-400/10 text-green-400 hover:bg-green-400/20 transition">+500 qadam</button></div>
+     <div><div class="flex justify-between text-sm mb-2"><span class="text-gray-400">Suv <span id="wV" class="text-gray-500"></span></span><span id="wP"></span></div>
+      <div class="h-2 bg-slate-800 rounded-full"><div id="wB" class="bar h-2 bg-blue-400 rounded-full" style="width:0"></div></div>
+      <button data-a="water" class="mt-2 text-xs px-3 py-1.5 rounded-lg bg-blue-400/10 text-blue-400 hover:bg-blue-400/20 transition">+250 ml 💧</button></div>
+     <div><div class="flex justify-between text-sm mb-2"><span class="text-gray-400">Uyqu <span id="sV" class="text-gray-500"></span></span><span id="sP"></span></div>
+      <div class="h-2 bg-slate-800 rounded-full"><div id="sB" class="bar h-2 bg-purple-400 rounded-full" style="width:0"></div></div>
+      <div class="mt-2 flex gap-2"><button data-a="sleep+" class="text-xs px-3 py-1.5 rounded-lg bg-purple-400/10 text-purple-400 hover:bg-purple-400/20 transition">+0.5 soat</button>
+      <button data-a="sleep-" class="text-xs px-3 py-1.5 rounded-lg bg-white/5 text-gray-400 hover:bg-white/10 transition">−0.5</button></div></div>
+    </div>
+    <button data-a="reset" class="mt-6 w-full text-sm text-gray-500 hover:text-white transition">↺ Kunni qayta boshlash</button>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- Stats -->
+<section class="border-y border-white/10 bg-slate-900/50">
+ <div class="max-w-7xl mx-auto px-6 py-12 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+  <div><h2 class="text-3xl font-bold text-green-400"><span data-c="10000">0</span>+</h2><p class="text-gray-400 mt-2">Foydalanuvchilar</p></div>
+  <div><h2 class="text-3xl font-bold text-green-400"><span data-c="50">0</span>+</h2><p class="text-gray-400 mt-2">Mashqlar</p></div>
+  <div><h2 class="text-3xl font-bold text-green-400"><span data-c="100">0</span>+</h2><p class="text-gray-400 mt-2">Maslahatlar</p></div>
+  <div><h2 class="text-3xl font-bold text-green-400">24/7</h2><p class="text-gray-400 mt-2">Motivatsiya</p></div>
+ </div>
+</section>
+
+<!-- Sport -->
+<section id="sport" class="max-w-7xl mx-auto px-6 py-20">
+ <div class="text-center max-w-2xl mx-auto mb-10 rv">
+  <p class="text-green-400 font-semibold">SPORT</p>
+  <h2 class="text-4xl font-bold mt-2">O‘zingizga mos sportni tanlang</h2>
+  <p class="text-gray-400 mt-4">Turni tanlang, kartani bosing — mashqlar va taymer ochiladi.</p>
+ </div>
+ <div id="filters" class="flex flex-wrap justify-center gap-3 mb-10"></div>
+ <div id="grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+</section>
+
+<!-- BMI -->
+<section id="bmi" class="bg-slate-900">
+ <div class="max-w-7xl mx-auto px-6 py-20 grid lg:grid-cols-2 gap-14 items-center">
+  <div class="rv">
+   <p class="text-green-400 font-semibold">SOG‘LIQ</p>
+   <h2 class="text-4xl font-bold mt-3">Tana massasi indeksi (BMI)</h2>
+   <p class="text-gray-400 mt-5">Bo‘y va vazningizni kiriting — natija darhol chiqadi. Bu faqat taxminiy ko‘rsatkich, aniq xulosa uchun shifokorga murojaat qiling.</p>
+  </div>
+  <div class="rv bg-slate-950 border border-white/10 rounded-2xl p-7">
+   <div class="grid grid-cols-2 gap-4">
+    <label class="text-sm text-gray-400">Bo‘y (sm)<input id="bh" type="number" min="100" max="250" placeholder="175" class="mt-2 w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-green-400"></label>
+    <label class="text-sm text-gray-400">Vazn (kg)<input id="bw" type="number" min="20" max="300" placeholder="70" class="mt-2 w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-green-400"></label>
+   </div>
+   <button id="bcalc" class="mt-5 w-full bg-green-400 text-slate-950 font-semibold py-3 rounded-xl hover:bg-green-300 transition">Hisoblash</button>
+   <div id="bres" class="hidden mt-6">
+    <div class="flex items-end justify-between"><span id="bv" class="text-5xl font-bold"></span><span id="bt" class="font-semibold"></span></div>
+    <div class="relative mt-4 h-3 rounded-full" style="background:linear-gradient(90deg,#60a5fa 0 20%,#4ade80 20% 50%,#facc15 50% 70%,#f87171 70%)">
+     <div id="bm" class="bar absolute -top-1 w-1.5 h-5 bg-white rounded" style="left:0"></div></div>
+    <p id="bd" class="text-gray-400 text-sm mt-4"></p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- Tips -->
+<section id="tips" class="max-w-3xl mx-auto px-6 py-20">
+ <div class="mb-10 rv"><p class="text-green-400 font-semibold">MASLAHATLAR</p>
+  <h2 class="text-4xl font-bold mt-2">Har kuni foydali odatlar</h2></div>
+ <div id="acc" class="space-y-3"></div>
+</section>
+
+<!-- CTA -->
+<section class="max-w-7xl mx-auto px-6 pb-20">
+ <div class="bg-green-400 rounded-3xl p-10 md:p-14 text-slate-950 text-center rv">
+  <h2 class="text-3xl md:text-4xl font-bold">Sog‘lom hayot bugundan boshlanadi.</h2>
+  <p class="mt-4 max-w-xl mx-auto">Har kuni kichik bir qadam tashlang va yaxshi odatlarni hayotingizning bir qismiga aylantiring.</p>
+  <button onclick="openSignup()" class="mt-7 bg-slate-950 text-white px-7 py-3 rounded-xl font-semibold hover:bg-slate-800 transition">Ro‘yxatdan o‘tish</button>
+ </div>
+</section>
+</main>
+
+<footer class="border-t border-white/10">
+ <div class="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between gap-4">
+  <div><h2 class="text-xl font-bold">Fit<span class="text-green-400">Life</span></h2><p class="text-gray-500 text-sm mt-2">Sog‘lom hayot sari birgalikda.</p></div>
+  <p class="text-gray-500 text-sm">© 2026 FitLife. Barcha huquqlar himoyalangan.</p>
+ </div>
+</footer>
+
+<!-- Modal / Toast / Top -->
+<div id="md" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+ <div id="mb" class="pop relative w-full max-w-md max-h-[90vh] overflow-y-auto bg-slate-900 border border-white/10 rounded-2xl p-7">
+  <button id="mx" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/5 hover:bg-white/10" aria-label="Yopish">✕</button>
+  <div id="mc"></div>
+ </div>
+</div>
+<div id="ts" class="fixed left-1/2 -translate-x-1/2 z-[60] hidden px-5 py-3 rounded-xl bg-white text-slate-950 font-medium shadow-xl" style="bottom:calc(env(safe-area-inset-bottom,0px) + 24px)"></div>
+<button id="up" class="hidden fixed right-5 z-40 w-12 h-12 rounded-full bg-green-400 text-slate-950 text-xl shadow-lg hover:bg-green-300" style="bottom:calc(env(safe-area-inset-bottom,0px) + 24px)" aria-label="Tepaga">↑</button>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+let tt;function toast(m){const t=$('#ts');t.textContent=m;t.classList.remove('hidden');clearTimeout(tt);tt=setTimeout(()=>t.classList.add('hidden'),2400)}
+
+/* Tracker */
+const G={step:10000,water:2000,sleep:8};
+let S={step:8420,water:1400,sleep:7};
+try{const x=JSON.parse(localStorage.getItem('fitlife')||'null');if(x)S=x}catch(e){}
+const save=()=>{try{localStorage.setItem('fitlife',JSON.stringify(S))}catch(e){}};
+const pc=(v,g)=>Math.min(100,Math.round(v/g*100));
+function draw(){
+ $('#stV').textContent=S.step.toLocaleString('en-US').replace(/,/g,' ');
+ [['st','step'],['w','water'],['s','sleep']].forEach(([k,n])=>{const p=pc(S[n],G[n]);$('#'+k+'B').style.width=p+'%';$('#'+k+'P').textContent=p+'%'});
+ $('#wV').textContent='('+S.water+' ml)';$('#sV').textContent='('+S.sleep+' soat)';save()}
+const done={};
+function chk(n,msg){if(S[n]>=G[n]&&!done[n]){done[n]=1;toast('🎉 '+msg)}if(S[n]<G[n])done[n]=0}
+$$('[data-a]').forEach(b=>b.onclick=()=>{
+ const a=b.dataset.a;
+ if(a=='step'){S.step+=500;chk('step','Qadam maqsadiga erishdingiz!')}
+ if(a=='water'){S.water+=250;chk('water','Kunlik suv me’yori bajarildi!')}
+ if(a=='sleep+'){S.sleep=Math.min(12,S.sleep+.5);chk('sleep','Yetarli uyqu — ajoyib!')}
+ if(a=='sleep-')S.sleep=Math.max(0,S.sleep-.5);
+ if(a=='reset'){S={step:0,water:0,sleep:0};toast('Yangi kun boshlandi')}
+ draw()});
+draw();
+
+/* Navbar */
+$('#burger').onclick=()=>$('#mob').classList.toggle('hidden');
+$$('#mob a').forEach(a=>a.onclick=()=>$('#mob').classList.add('hidden'));
+addEventListener('scroll',()=>{
+ $('#hd').classList.toggle('glass',scrollY>20);$('#hd').classList.toggle('border-b',scrollY>20);$('#hd').classList.toggle('border-white/10',scrollY>20);
+ $('#up').classList.toggle('hidden',scrollY<600)});
+$('#up').onclick=()=>scrollTo({top:0});
+
+/* Modal */
+function openM(h){$('#mc').innerHTML=h;$('#md').classList.remove('hidden');document.body.style.overflow='hidden'}
+function closeM(){$('#md').classList.add('hidden');document.body.style.overflow='';clearInterval(tm)}
+$('#mx').onclick=closeM;$('#md').onclick=e=>{if(e.target.id=='md')closeM()};
+addEventListener('keydown',e=>{if(e.key=='Escape')closeM()});
+
+/* Sports */
+const SP=[
+{e:'🏃',n:'Yugurish',c:'Kardio',m:30,k:300,d:'Chidamlilikni oshirish va faol bo‘lish uchun ajoyib tanlov.',x:['5 daqiqa yurib qizish','20 daqiqa yengil yugurish','5 daqiqa sekin yurish','Cho‘zilish mashqlari']},
+{e:'🏋️',n:'Fitness',c:'Kuch',m:45,k:350,d:'Kuch va umumiy jismoniy tayyorgarlikni rivojlantiring.',x:['Squat — 3×12','Otjimaniya — 3×10','Plank — 3×40 soniya','Lunge — 3×10']},
+{e:'🚴',n:'Velosiped',c:'Kardio',m:40,k:320,d:'Ochiq havoda harakat qilish va faol vaqt o‘tkazish.',x:['5 daqiqa sekin haydash','30 daqiqa o‘rtacha tezlik','5 daqiqa tinchlanish']},
+{e:'🧘',n:'Yoga',c:'Yengil',m:30,k:120,d:'Egiluvchanlik va xotirjamlik uchun mashqlar.',x:['Chuqur nafas — 3 daqiqa','Mushuk-sigir holati','Itning pastga qarashi','Bolalar holati']},
+{e:'🏊',n:'Suzish',c:'Kardio',m:40,k:400,d:'Butun tanani yuklaydigan, bo‘g‘imlarga yengil mashq.',x:['Qizish — 200 m','Erkin usul — 4×100 m','Orqada suzish — 2×100 m','Sovutish — 100 m']},
+{e:'🚶',n:'Tez yurish',c:'Yengil',m:30,k:150,d:'Har kimga mos, oddiy va samarali mashq.',x:['Qulay poyabzal kiying','25 daqiqa tez yuring','Qadamlar: ~3000','Suv ichishni unutmang']}];
+let cat='Hammasi';
+function renderF(){const cs=['Hammasi',...new Set(SP.map(s=>s.c))];
+ $('#filters').innerHTML=cs.map(c=>`<button data-f="${c}" class="px-5 py-2 rounded-full text-sm font-medium transition ${c==cat?'bg-green-400 text-slate-950':'bg-white/5 text-gray-300 hover:bg-white/10'}">${c}</button>`).join('');
+ $$('[data-f]').forEach(b=>b.onclick=()=>{cat=b.dataset.f;renderF();renderG()})}
+function renderG(){$('#grid').innerHTML=SP.map((s,i)=>({s,i})).filter(o=>cat=='Hammasi'||o.s.c==cat).map(({s,i})=>`
+ <div class="pop group bg-slate-900 border border-white/10 rounded-2xl p-7 hover:border-green-400/50 hover:-translate-y-1 transition cursor-pointer" onclick="openSport(${i})">
+  <div class="flex justify-between items-start"><div class="text-4xl">${s.e}</div><span class="text-xs px-3 py-1 rounded-full bg-green-400/10 text-green-400">${s.c}</span></div>
+  <h3 class="text-xl font-bold mt-5">${s.n}</h3><p class="text-gray-400 mt-3">${s.d}</p>
+  <div class="flex justify-between items-center mt-5 text-sm text-gray-500"><span>⏱ ${s.m} daq · 🔥 ${s.k} kkal</span><span class="text-green-400 group-hover:translate-x-1 transition">Ochish →</span></div></div>`).join('')}
+renderF();renderG();
+
+let tm,left=0,run=false;
+const fmt=s=>String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+function openSport(i){const s=SP[i];left=s.m*60;run=false;
+ openM(`<div class="text-5xl">${s.e}</div><h3 class="text-2xl font-bold mt-3">${s.n}</h3><p class="text-gray-400 mt-2">${s.d}</p>
+ <ul class="mt-5 space-y-2">${s.x.map(x=>`<li><label class="flex items-center gap-3 bg-slate-950 rounded-xl px-4 py-3 cursor-pointer"><input type="checkbox" class="ck accent-green-400 w-4 h-4"><span>${x}</span></label></li>`).join('')}</ul>
+ <p id="pr" class="text-sm text-gray-400 mt-3">0 / ${s.x.length} bajarildi</p>
+ <div class="text-center mt-5"><div id="tv" class="text-5xl font-bold tabular-nums">${fmt(left)}</div>
+ <div class="flex gap-3 mt-4"><button id="tg" class="flex-1 bg-green-400 text-slate-950 font-semibold py-3 rounded-xl hover:bg-green-300">▶ Boshlash</button>
+ <button id="tr" class="px-5 border border-white/20 rounded-xl hover:bg-white/10">↺</button></div></div>`);
+ $$('.ck').forEach(c=>c.onchange=()=>{const n=$$('.ck:checked').length;$('#pr').textContent=n+' / '+s.x.length+' bajarildi';if(n==s.x.length)toast('✅ Barcha mashqlar bajarildi!')});
+ $('#tg').onclick=()=>{run=!run;$('#tg').textContent=run?'⏸ To‘xtatish':'▶ Davom etish';clearInterval(tm);
+  if(run)tm=setInterval(()=>{left--;$('#tv').textContent=fmt(left);if(left<=0){clearInterval(tm);S.step+=s.k*10;draw();closeM();toast('🔥 '+s.k+' kkal yoqdingiz! Qadamlar qo‘shildi')}},1000)};
+ $('#tr').onclick=()=>{clearInterval(tm);run=false;left=s.m*60;$('#tv').textContent=fmt(left);$('#tg').textContent='▶ Boshlash'}}
+
+/* BMI */
+$('#bcalc').onclick=()=>{const h=+$('#bh').value/100,w=+$('#bw').value;
+ if(!h||!w||h<1||w<20){toast('Bo‘y va vazningizni to‘g‘ri kiriting');return}
+ const b=w/(h*h);let t,c,d;
+ if(b<18.5){t='Kam vazn';c='#60a5fa';d='Ovqatlanishni to‘yimliroq qiling va mutaxassis bilan maslahatlashing.'}
+ else if(b<25){t='Normal';c='#4ade80';d='Ajoyib! Hozirgi odatlaringizni davom ettiring.'}
+ else if(b<30){t='Ortiqcha vazn';c='#facc15';d='Harakatni oshiring va ratsionni muvozanatlang.'}
+ else{t='Semizlik';c='#f87171';d='Shifokor yoki dietolog bilan maslahatlashish tavsiya etiladi.'}
+ $('#bres').classList.remove('hidden');$('#bv').textContent=b.toFixed(1);$('#bt').textContent=t;$('#bt').style.color=c;$('#bd').textContent=d;
+ $('#bm').style.left=Math.min(98,Math.max(0,(b-12)/(40-12)*100))+'%'};
+['bh','bw'].forEach(i=>$('#'+i).addEventListener('keydown',e=>{if(e.key=='Enter')$('#bcalc').click()}));
+
+/* Accordion */
+const TP=[['01 — HARAKAT','Ko‘proq harakat qiling','Uzoq vaqt bir joyda o‘tirib qolmang. Har soatda 5 daqiqa turib yuring, zinadan foydalaning, qisqa yurishlarni odat qiling.'],
+['02 — OVQAT','Muvozanatli ovqatlaning','Sabzavot, meva, oqsil va to‘liq donli mahsulotlarni ratsioningizga qo‘shing. Shirinlik va qovurilgan ovqatni kamaytiring.'],
+['03 — SUV','Yetarlicha suv iching','Kun davomida muntazam suv iching. Ertalab bir stakan suv bilan boshlash yaxshi odat.'],
+['04 — DAM','Sifatli uyqu va dam','Kattalar uchun odatda 7–9 soat uyqu tavsiya etiladi. Uxlashdan oldin ekranlardan uzoqlashing.'],
+['05 — ROHIY HOLAT','Stressni boshqaring','Chuqur nafas, qisqa mashqlar yoki yaqinlar bilan suhbat kayfiyatni yaxshilaydi.']];
+$('#acc').innerHTML=TP.map((t,i)=>`<div class="rv bg-slate-900 border border-white/10 rounded-2xl overflow-hidden">
+ <button class="ah w-full text-left p-6 flex items-center justify-between gap-4" aria-expanded="false"><span><span class="block text-green-400 text-sm font-semibold">${t[0]}</span><span class="block text-xl font-bold mt-1">${t[1]}</span></span><span class="ai text-2xl text-green-400 transition">＋</span></button>
+ <div class="ap hidden px-6 pb-6 text-gray-400">${t[2]}</div></div>`).join('');
+$$('.ah').forEach(b=>b.onclick=()=>{const p=b.nextElementSibling,o=p.classList.contains('hidden');
+ $$('.ap').forEach(x=>x.classList.add('hidden'));$$('.ai').forEach(x=>x.style.transform='');
+ if(o){p.classList.remove('hidden');b.querySelector('.ai').style.transform='rotate(45deg)'}});
+
+/* Auth */
+const LS={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const SS={get(k){try{return JSON.parse(sessionStorage.getItem(k))}catch(e){return null}},set(k,v){try{sessionStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const esc=s=>String(s).replace(/[<>&"']/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[c]));
+const hash=async p=>{try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(p));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){return btoa(unescape(encodeURIComponent(p)))}};
+let user=LS.get('fl_session')||SS.get('fl_session');
+
+function renderAuth(){
+ const a=$('#auth');
+ if(!user){
+  a.innerHTML=`<button onclick="openAuth('login')" class="border border-white/20 px-4 py-2.5 rounded-xl font-semibold hover:bg-white/10 transition">Kirish</button><button onclick="openAuth('reg')" class="hidden sm:block bg-green-400 text-slate-950 px-5 py-2.5 rounded-xl font-semibold hover:bg-green-300 transition">Boshlash</button>`;return}
+ a.innerHTML=`<div class="relative"><button id="ub" class="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full border border-white/15 hover:bg-white/10 transition"><span class="w-8 h-8 rounded-full bg-green-400 text-slate-950 font-bold flex items-center justify-center">${esc(user.name[0].toUpperCase())}</span><span class="hidden sm:inline text-sm">${esc(user.name.split(' ')[0])}</span></button>
+ <div id="um" class="hidden absolute right-0 mt-2 w-48 bg-slate-900 border border-white/10 rounded-xl p-2 text-sm shadow-xl"><button onclick="openProfile()" class="w-full text-left px-3 py-2 rounded-lg hover:bg-white/10">👤 Profil</button><button onclick="logout()" class="w-full text-left px-3 py-2 rounded-lg hover:bg-white/10 text-red-400">⎋ Chiqish</button></div></div>`;
+ $('#ub').onclick=e=>{e.stopPropagation();$('#um').classList.toggle('hidden')}}
+document.addEventListener('click',()=>{const m=$('#um');if(m)m.classList.add('hidden')});
+
+function openSignup(){openAuth('reg')}
+function openAuth(mode){
+ const reg=mode=='reg',inp='w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 outline-none focus:border-green-400';
+ openM(`<h3 class="text-2xl font-bold">${reg?'Hisob yaratish 💪':'Xush kelibsiz 👋'}</h3>
+ <p class="text-gray-400 text-sm mt-1">${reg?'Bir daqiqada ro‘yxatdan o‘ting.':'Hisobingizga kiring.'}</p>
+ <div class="grid grid-cols-2 gap-1 bg-slate-950 rounded-xl p-1 mt-5 text-sm font-medium">
+  <button onclick="openAuth('login')" class="py-2 rounded-lg ${reg?'text-gray-400':'bg-green-400 text-slate-950'}">Kirish</button>
+  <button onclick="openAuth('reg')" class="py-2 rounded-lg ${reg?'bg-green-400 text-slate-950':'text-gray-400'}">Ro‘yxatdan o‘tish</button></div>
+ <div class="mt-5 space-y-4">
+  ${reg?`<input id="an" placeholder="Ismingiz" autocomplete="name" class="${inp}">`:''}
+  <input id="ae" type="email" placeholder="Email" autocomplete="email" class="${inp}">
+  <div class="relative"><input id="ap" type="password" placeholder="Parol (kamida 6 belgi)" autocomplete="${reg?'new-password':'current-password'}" class="${inp} pr-12"><button type="button" id="ay" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white" aria-label="Parolni ko‘rsatish">👁</button></div>
+  ${reg?`<select id="ag" class="${inp}"><option>Vazn yo‘qotish</option><option>Mushak orttirish</option><option>Sog‘lom bo‘lish</option><option>Chidamlilik</option></select>`
+   :`<label class="flex items-center gap-2 text-sm text-gray-400"><input id="ar" type="checkbox" checked class="accent-green-400"> Meni eslab qol</label>`}
+  <p id="er" class="text-red-400 text-sm hidden"></p>
+  <button id="ab" class="w-full bg-green-400 text-slate-950 font-semibold py-3 rounded-xl hover:bg-green-300 transition">${reg?'Ro‘yxatdan o‘tish':'Kirish'}</button>
+ </div>`);
+ const err=m=>{const e=$('#er');e.textContent=m;e.classList.remove('hidden')};
+ $('#ay').onclick=()=>{const p=$('#ap');p.type=p.type=='password'?'text':'password'};
+ async function submit(){
+  const em=$('#ae').value.trim().toLowerCase(),pw=$('#ap').value,us=LS.get('fl_users')||{};
+  if(!/^\S+@\S+\.\S+$/.test(em))return err('Email noto‘g‘ri');
+  if(pw.length<6)return err('Parol kamida 6 ta belgidan iborat bo‘lsin');
+  if(reg){
+   const n=$('#an').value.trim();if(n.length<2)return err('Ismingizni kiriting');
+   if(us[em])return err('Bu email allaqachon ro‘yxatdan o‘tgan');
+   us[em]={name:n,goal:$('#ag').value,h:await hash(pw)};LS.set('fl_users',us);start(em,us[em],true)
+  }else{
+   const u=us[em];if(!u||u.h!==await hash(pw))return err('Email yoki parol noto‘g‘ri');
+   start(em,u,$('#ar').checked)}}
+ $('#ab').onclick=submit;
+ $('#mc').onkeydown=e=>{if(e.key=='Enter')submit()};
+ setTimeout(()=>$(reg?'#an':'#ae').focus(),50)}
+function start(email,u,rem){
+ user={email,name:u.name,goal:u.goal};(rem?LS:SS).set('fl_session',user);
+ closeM();renderAuth();toast('👋 Xush kelibsiz, '+u.name+'!')}
+function logout(){
+ try{localStorage.removeItem('fl_session');sessionStorage.removeItem('fl_session')}catch(e){}
+ user=null;renderAuth();toast('Tizimdan chiqdingiz')}
+function openProfile(){
+ openM(`<div class="text-center"><div class="w-20 h-20 mx-auto rounded-full bg-green-400 text-slate-950 text-3xl font-bold flex items-center justify-center">${esc(user.name[0].toUpperCase())}</div>
+ <h3 class="text-2xl font-bold mt-4">${esc(user.name)}</h3><p class="text-gray-400 text-sm">${esc(user.email)}</p>
+ <p class="mt-3 inline-block text-xs px-3 py-1 rounded-full bg-green-400/10 text-green-400">Maqsad: ${esc(user.goal||'—')}</p></div>
+ <div class="mt-6 space-y-3 text-sm">
+  <div class="flex justify-between bg-slate-950 rounded-xl px-4 py-3"><span class="text-gray-400">Qadam</span><span>${pc(S.step,G.step)}%</span></div>
+  <div class="flex justify-between bg-slate-950 rounded-xl px-4 py-3"><span class="text-gray-400">Suv</span><span>${pc(S.water,G.water)}%</span></div>
+  <div class="flex justify-between bg-slate-950 rounded-xl px-4 py-3"><span class="text-gray-400">Uyqu</span><span>${pc(S.sleep,G.sleep)}%</span></div></div>
+ <button onclick="closeM();logout()" class="mt-6 w-full border border-red-400/40 text-red-400 py-3 rounded-xl font-semibold hover:bg-red-400/10 transition">Chiqish</button>`)}
+renderAuth();
+
+/* Reveal + counters */
+const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{threshold:.15});
+$$('.rv').forEach(x=>io.observe(x));
+const co=new IntersectionObserver(es=>es.forEach(x=>{if(!x.isIntersecting)return;co.unobserve(x.target);
+ const el=x.target,to=+el.dataset.c,t0=performance.now();
+ (function f(t){const p=Math.min(1,(t-t0)/1400);el.textContent=Math.round(to*(1-Math.pow(1-p,3))).toLocaleString('en-US');if(p<1)requestAnimationFrame(f)})(t0)}),{threshold:.5});
+$$('[data-c]').forEach(x=>co.observe(x));
+</script>
+</body>
+</html>
