@@ -347,6 +347,7 @@
     <ul id="randomList" class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5"></ul>
   </div>
 
+  <div id="collections" class="reveal mb-8 grid gap-4 opacity-0 translate-y-7 transition duration-700 md:grid-cols-3"></div>
   <div id="exerciseGrid" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
   <p id="emptyMsg" data-i18n="ex_none" class="mt-10 hidden text-center text-slate-500"></p>
 </section>
@@ -414,6 +415,7 @@
       <div>
         <h3 id="pTitle" class="text-2xl font-extrabold"></h3>
         <p id="pSub" class="mt-1 text-sm text-slate-500"></p>
+        <p id="pSeq" class="mt-1 hidden text-xs font-semibold text-brand-600 dark:text-brand-400"></p>
       </div>
       <button id="pClose" type="button" class="text-3xl leading-none text-slate-500 hover:text-slate-800 dark:hover:text-white" aria-label="Close">×</button>
     </div>
@@ -543,7 +545,7 @@ const I18N = {
     w_need2: "Grafik uchun kamida 2 ta o'lchov kerak", w_none: "Hali o'lchov yo'q", w_saved: 'Vazn saqlandi ✅',
     ex_title: 'Mashqlar kutubxonasi', ex_sub: "Har bir mashq uchun animatsiyali ko'rsatma, qadamlar va takror hisoblagich.",
     search_ph: 'Mashq qidirish...', f_all: 'Barchasi', f_kuch: 'Kuch', f_kardio: 'Kardio', f_coz: "Cho'zilish", f_fav: '❤️ Sevimlilar',
-    ex_none: 'Mos mashq topilmadi.', play_btn: "▶ Animatsiyali ko'rsatma",
+    col_count: 'ta mashq', col_morning: 'Ertalabki sbornik', col_morning_d: '5 daqiqa — energiya va isinish uchun', col_evening: 'Kechqurungi sbornik', col_evening_d: "Dam olish va cho'zilish — uyquga tayyorgarlik", col_abetti: 'Abetti sbornigi', col_abetti_d: 'Qorin mashqlari — 10 daqiqa', col_start: '▶ Sbornikni boshlash', col_done: "Sbornik tugadi 🎉 Zo'r ish!", seq_label: 'Sbornik: {i}/{n}', ex_none: 'Mos mashq topilmadi.', play_btn: "▶ Animatsiyali ko'rsatma",
     random_title: "🎲 Tasodifiy mashg'ulot", random_hint: "5 ta tasodifiy mashq. Har birini bosib oching.", random_btn: '🎲 Yangilash',
     p_steps: 'Qadamlar', p_pause: '⏸ Pauza', p_play: '▶ Davom', p_log: "📓 Jurnalga qo'shish", p_yt: "YouTube'da ham ko'rish →",
     p_disc: "Animatsiya — mashqning schematik ko'rinishi. Og'riq yoki jarohat bo'lsa, mashqni to'xtating.",
@@ -620,7 +622,7 @@ const I18N = {
     w_need2: 'Для графика нужно минимум 2 измерения', w_none: 'Измерений пока нет', w_saved: 'Вес сохранён ✅',
     ex_title: 'Библиотека упражнений', ex_sub: 'Анимированная инструкция, шаги и счётчик повторов для каждого упражнения.',
     search_ph: 'Поиск упражнения...', f_all: 'Все', f_kuch: 'Силовые', f_kardio: 'Кардио', f_coz: 'Растяжка', f_fav: '❤️ Избранное',
-    ex_none: 'Упражнений не найдено.', play_btn: '▶ Анимированная инструкция',
+    col_count: 'упр.', col_morning: 'Утренний сборник', col_morning_d: '5 минут — энергия и разминка', col_evening: 'Вечерний сборник', col_evening_d: 'Расслабление и растяжка — перед сном', col_abetti: 'Сборник Abetti', col_abetti_d: 'Упражнения на пресс — 10 минут', col_start: '▶ Начать сборник', col_done: 'Сборник завершён 🎉 Отличная работа!', seq_label: 'Сборник: {i}/{n}', ex_none: 'Упражнений не найдено.', play_btn: '▶ Анимированная инструкция',
     random_title: '🎲 Случайная тренировка', random_hint: '5 случайных упражнений. Нажмите, чтобы открыть.', random_btn: '🎲 Обновить',
     p_steps: 'Шаги', p_pause: '⏸ Пауза', p_play: '▶ Продолжить', p_log: '📓 В дневник', p_yt: 'Смотреть на YouTube →',
     p_disc: 'Анимация — схематичный показ. При боли или травме прекратите упражнение.',
@@ -695,7 +697,7 @@ const I18N = {
     w_need2: 'Need at least 2 measurements for the chart', w_none: 'No measurements yet', w_saved: 'Weight saved ✅',
     ex_title: 'Exercise library', ex_sub: 'Animated guide, steps and a rep counter for every exercise.',
     search_ph: 'Search exercises...', f_all: 'All', f_kuch: 'Strength', f_kardio: 'Cardio', f_coz: 'Stretch', f_fav: '❤️ Favorites',
-    ex_none: 'No exercises found.', play_btn: '▶ Animated guide',
+    col_count: 'exercises', col_morning: 'Morning set', col_morning_d: '5 min — energy and warm-up', col_evening: 'Evening set', col_evening_d: 'Relax and stretch — before bed', col_abetti: 'Abetti set', col_abetti_d: 'Core workout — 10 min', col_start: '▶ Start set', col_done: 'Set complete 🎉 Great work!', seq_label: 'Set: {i}/{n}', ex_none: 'No exercises found.', play_btn: '▶ Animated guide',
     random_title: '🎲 Random workout', random_hint: '5 random exercises. Tap any to open it.', random_btn: '🎲 Shuffle',
     p_steps: 'Steps', p_pause: '⏸ Pause', p_play: '▶ Play', p_log: '📓 Log it', p_yt: 'Watch on YouTube →',
     p_disc: 'Animation is a schematic demo. Stop if you feel pain or injury.',
@@ -896,6 +898,7 @@ const DEFAULT_HABITS = [
 let favs, hist, lastCalc, water, journal, weights, foods, habitDefs, habitLog, user;
 let randIds = [];
 let speed = 1, player = null, playerIdx = 0, wipeArmed = false;
+let seq = null, seqPos = 0;
 const tm = { ms: 0, target: 0, running: false, started: false, id: null };
 const active = new Set();
 const state = { cat: 'all', q: '' };
@@ -935,7 +938,7 @@ function setLang(l) {
   renderAll();
   renderEx();
   if (lastCalc) calc(null, true);
-  if (player) openPlayer(playerIdx);
+  if (player) openPlayer(playerIdx, !!seq);
   startTyping();
 }
 $('lang').addEventListener('change', (e) => setLang(e.target.value));
@@ -1050,11 +1053,14 @@ function doseTxt(ex) {
   return ex.timed ? `${ex.dose[0]} × ${ex.dose[1]} ${t('sec_s')}` : `${ex.dose[0]} × ${ex.dose[1]}`;
 }
 
-function openPlayer(idx) {
+function openPlayer(idx, keepSeq) {
+  if (!keepSeq) seq = null;
   playerIdx = (idx + EX.length) % EX.length;
   const ex = EX[playerIdx];
   if (player) active.delete(player);
   $('pTitle').textContent = ex.name[lang];
+  $('pSeq').textContent = seq ? fmt('seq_label', { i: seqPos + 1, n: seq.length }) : '';
+  $('pSeq').classList.toggle('hidden', !seq);
   $('pSub').textContent = `${ex.muscle[lang]} · ${doseTxt(ex)} · ${t('lvl' + ex.lvl)}`;
   $('pSteps').innerHTML = ex.steps[lang].map((s, i) => `
     <li class="flex gap-3 transition duration-300 ${STEP_OFF}">
@@ -1081,6 +1087,7 @@ function openPlayer(idx) {
 
 function closePlayer() {
   if (player) { active.delete(player); player = null; }
+  seq = null;
   showModal('playerModal', false);
 }
 function setPlayUI() { if (player) $('pPlay').textContent = player.playing ? t('p_pause') : t('p_play'); }
@@ -1090,8 +1097,8 @@ $('pClose').addEventListener('click', closePlayer);
 $('playerModal').addEventListener('click', (e) => { if (e.target.id === 'playerModal') closePlayer(); });
 $('pPlay').addEventListener('click', () => { if (!player) return; player.playing = !player.playing; setPlayUI(); });
 $('pReset').addEventListener('click', () => { if (player) player.reset(); });
-$('pPrev').addEventListener('click', () => openPlayer(playerIdx - 1));
-$('pNext').addEventListener('click', () => openPlayer(playerIdx + 1));
+$('pPrev').addEventListener('click', () => navPlayer(-1));
+$('pNext').addEventListener('click', () => navPlayer(1));
 $('pLog').addEventListener('click', () => {
   if (!player) return;
   const ex = player.ex;
@@ -1668,7 +1675,41 @@ function renderRandom() {
     </li>`;
   }).join('');
 }
-function renderEx() { renderExercises(); renderRandom(); setFilterChips(); }
+const COLS = [
+  { id: 'morning', icon: '🌅', k: 'col_morning', dk: 'col_morning_d', items: ['jacks', 'squat', 'pushup', 'catcow'] },
+  { id: 'evening', icon: '🌙', k: 'col_evening', dk: 'col_evening_d', items: ['catcow', 'bridge', 'superman'] },
+  { id: 'abetti', icon: '🔥', k: 'col_abetti', dk: 'col_abetti_d', items: ['crunch', 'plank', 'mountain'] }
+];
+function renderCollections() {
+  $('collections').innerHTML = COLS.map((c) => `
+    <div class="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+      <div class="flex items-center justify-between gap-3">
+        <span class="text-3xl">${c.icon}</span>
+        <span class="rounded-full bg-brand-500/10 px-3 py-1 text-xs font-semibold text-brand-600 dark:text-brand-400">${c.items.length} ${t('col_count')}</span>
+      </div>
+      <h3 class="mt-3 text-lg font-bold">${t(c.k)}</h3>
+      <p class="text-sm text-slate-500">${t(c.dk)}</p>
+      <ul class="mt-3 space-y-1 text-sm">${c.items.map((id) => { const ex = EX.find((x) => x.id === id); return `<li>• ${ex.name[lang]} <span class="text-slate-400">${doseTxt(ex)}</span></li>`; }).join('')}</ul>
+      <button type="button" data-col="${c.id}" class="mt-4 w-full rounded-xl bg-brand-500 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-600">${t('col_start')}</button>
+    </div>`).join('');
+}
+function renderEx() { renderExercises(); renderRandom(); renderCollections(); setFilterChips(); }
+$('collections').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-col]');
+  if (!b) return;
+  const col = COLS.find((c) => c.id === b.dataset.col);
+  seq = col.items.map((id) => EX.findIndex((x) => x.id === id));
+  seqPos = 0;
+  openPlayer(seq[0], true);
+});
+function navPlayer(dir) {
+  if (!seq) { openPlayer(playerIdx + dir); return; }
+  const np = seqPos + dir;
+  if (np < 0) return;
+  if (np >= seq.length) { closePlayer(); toast(t('col_done')); return; }
+  seqPos = np;
+  openPlayer(seq[np], true);
+}
 
 function setFilterChips() {
   document.querySelectorAll('[data-filter]').forEach((b) => setChip(b, b.dataset.filter === state.cat));
