@@ -1,335 +1,1897 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="uz" class="scroll-smooth scroll-pt-20">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>FitLife — Sog‘liq va Sport</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-:root{color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-html{scroll-behavior:smooth;scroll-padding-top:90px}
-body{background:#020617;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
-.rv{opacity:0;transform:translateY(24px);transition:.7s}
-.rv.in{opacity:1;transform:none}
-.glass{background:rgba(15,23,42,.7);backdrop-filter:blur(12px)}
-.bar{transition:width .6s cubic-bezier(.4,0,.2,1)}
-.pop{animation:pop .25s ease}
-@keyframes pop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
-@keyframes fl{50%{transform:translateY(-8px)}}
-.fl{animation:fl 4s ease-in-out infinite}
-</style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>FitLife — Sog'liq va sport</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+        colors: { brand: { 400: '#4ade80', 500: '#22c55e', 600: '#16a34a', 700: '#15803d' } },
+        keyframes: {
+          drift: { '0%,100%': { transform: 'translate(0,0) scale(1)' }, '50%': { transform: 'translate(40px,-30px) scale(1.12)' } },
+          popin: { from: { opacity: '0', transform: 'translateY(12px) scale(.97)' }, to: { opacity: '1', transform: 'none' } },
+          blink: { '50%': { opacity: '0' } },
+          pulsering: { '0%': { boxShadow: '0 0 0 0 rgba(34,197,94,.45)' }, '100%': { boxShadow: '0 0 0 16px rgba(34,197,94,0)' } },
+          ringin: { from: { opacity: '0', transform: 'scale(.6) rotate(-90deg)' }, to: { opacity: '1', transform: 'none' } }
+        },
+        animation: {
+          drift: 'drift 16s ease-in-out infinite',
+          popin: 'popin .6s cubic-bezier(.2,.9,.3,1.2) backwards',
+          blink: 'blink 1s steps(1) infinite',
+          pulsering: 'pulsering 2.2s ease-out infinite',
+          ringin: 'ringin 1s cubic-bezier(.2,.9,.3,1) backwards'
+        }
+      }
+    }
+  };
+</script>
 </head>
-<body class="text-white">
 
-<!-- Navbar -->
-<header id="hd" class="fixed top-0 inset-x-0 z-40 transition" style="padding-top:env(safe-area-inset-top,0px)">
- <nav class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-  <a href="#top" class="text-2xl font-bold">Fit<span class="text-green-400">Life</span></a>
-  <div class="hidden md:flex gap-8 text-gray-300" id="links">
-   <a href="#top" class="hover:text-green-400 transition">Bosh sahifa</a>
-   <a href="#sport" class="hover:text-green-400 transition">Sport</a>
-   <a href="#bmi" class="hover:text-green-400 transition">BMI</a>
-   <a href="#tips" class="hover:text-green-400 transition">Maslahatlar</a>
+<body class="bg-slate-50 font-sans text-slate-900 antialiased overflow-x-hidden dark:bg-slate-950 dark:text-slate-100">
+
+<div id="progress" class="fixed left-0 top-0 z-[60] h-[3px] w-0 bg-gradient-to-r from-brand-500 to-blue-500 print:hidden"></div>
+
+<!-- NAVBAR -->
+<header id="navbar" class="sticky top-0 z-40 bg-white/75 pt-[env(safe-area-inset-top,0px)] backdrop-blur transition-shadow duration-300 print:hidden dark:bg-slate-950/75">
+  <nav class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4">
+    <a href="#asosiy" class="flex items-center gap-2 text-lg font-extrabold">
+      <span class="grid h-9 w-9 place-items-center rounded-xl bg-brand-500 text-white animate-pulsering">💪</span>FitLife
+    </a>
+    <div class="hidden items-center gap-5 text-sm font-medium text-slate-600 lg:flex dark:text-slate-300">
+      <a href="#panel" data-nav data-i18n="nav_dash" class="transition hover:text-brand-500"></a>
+      <a href="#hisoblagich" data-nav data-i18n="nav_calc" class="transition hover:text-brand-500"></a>
+      <a href="#vositalar" data-nav data-i18n="nav_tools" class="transition hover:text-brand-500"></a>
+      <a href="#jurnal" data-nav data-i18n="nav_journal" class="transition hover:text-brand-500"></a>
+      <a href="#mashqlar" data-nav data-i18n="nav_ex" class="transition hover:text-brand-500"></a>
+      <a href="#maslahat" data-nav data-i18n="nav_tips" class="transition hover:text-brand-500"></a>
+    </div>
+    <div class="flex items-center gap-2">
+      <span id="greet" class="hidden text-sm text-slate-500 xl:inline dark:text-slate-400"></span>
+      <select id="lang" aria-label="Language" class="h-9 rounded-lg border border-slate-300 bg-white px-2 text-sm font-semibold dark:border-slate-700 dark:bg-slate-900">
+        <option value="uz">UZ</option>
+        <option value="ru">RU</option>
+        <option value="en">EN</option>
+      </select>
+      <button id="themeBtn" type="button" class="h-9 w-9 rounded-lg transition hover:bg-slate-100 dark:hover:bg-slate-800">🌓</button>
+      <button id="authBtn" type="button" class="h-9 rounded-lg bg-brand-500 px-4 text-sm font-semibold text-white transition hover:bg-brand-600">Kirish</button>
+      <button id="menuBtn" type="button" class="h-9 w-9 rounded-lg hover:bg-slate-100 lg:hidden dark:hover:bg-slate-800" aria-label="Menu">☰</button>
+    </div>
+  </nav>
+  <div id="mobileMenu" class="hidden border-t border-slate-200 px-4 py-3 text-sm font-medium lg:hidden dark:border-slate-800">
+    <a href="#panel" data-i18n="nav_dash" class="block py-2"></a>
+    <a href="#hisoblagich" data-i18n="nav_calc" class="block py-2"></a>
+    <a href="#vositalar" data-i18n="nav_tools" class="block py-2"></a>
+    <a href="#jurnal" data-i18n="nav_journal" class="block py-2"></a>
+    <a href="#mashqlar" data-i18n="nav_ex" class="block py-2"></a>
+    <a href="#maslahat" data-i18n="nav_tips" class="block py-2"></a>
   </div>
-  <div class="flex items-center gap-3">
-   <div id="auth" class="flex items-center gap-2"></div>
-   <button id="burger" class="md:hidden w-10 h-10 rounded-xl border border-white/15 text-xl" aria-label="Menyu">☰</button>
-  </div>
- </nav>
- <div id="mob" class="hidden md:hidden glass border-t border-white/10 px-6 py-4 space-y-3 text-gray-200">
-  <a href="#top" class="block">Bosh sahifa</a><a href="#sport" class="block">Sport</a><a href="#bmi" class="block">BMI</a><a href="#tips" class="block">Maslahatlar</a>
- </div>
 </header>
 
-<main id="top">
-<!-- Hero -->
-<section class="max-w-7xl mx-auto px-6 pt-32 pb-20 grid lg:grid-cols-2 gap-14 items-center">
- <div class="rv">
-  <span class="inline-block bg-green-400/10 text-green-400 px-4 py-2 rounded-full text-sm mb-6">Sog‘lom hayot — yaxshi kelajak</span>
-  <h1 class="text-5xl md:text-6xl font-bold leading-tight">Sog‘lom tana, <span class="bg-gradient-to-r from-green-400 to-cyan-400 bg-clip-text text-transparent">kuchli hayot.</span></h1>
-  <p class="text-gray-400 text-lg mt-6 max-w-xl">Sport, to‘g‘ri ovqatlanish va yaxshi odatlar orqali o‘zingizni yanada yaxshi his qiling. Kunlik faolligingizni o‘ng tomonda kuzating.</p>
-  <div class="flex flex-wrap gap-4 mt-8">
-   <a href="#sport" class="bg-green-400 text-slate-950 px-7 py-3 rounded-xl font-semibold hover:bg-green-300 hover:-translate-y-0.5 transition">Sportni boshlash</a>
-   <a href="#tips" class="border border-white/20 px-7 py-3 rounded-xl font-semibold hover:bg-white/10 transition">Maslahatlarni ko‘rish</a>
-  </div>
- </div>
-
- <div class="rv fl">
-  <div class="bg-gradient-to-br from-green-400/20 to-blue-500/20 rounded-3xl p-6 md:p-8">
-   <div class="bg-slate-900 rounded-2xl p-6 md:p-8 border border-white/10">
-    <div class="flex justify-between items-center mb-6">
-     <div><p class="text-gray-400 text-sm">Bugungi faollik</p>
-      <h2 class="text-4xl font-bold mt-1" id="stV">0</h2><p class="text-green-400 text-sm">qadam / 10 000</p></div>
-     <div class="w-14 h-14 bg-green-400/10 rounded-2xl flex items-center justify-center text-2xl">🏃</div>
+<!-- HERO -->
+<section id="asosiy" class="relative overflow-hidden bg-[radial-gradient(60%_50%_at_80%_0%,rgba(34,197,94,.18),transparent_70%),radial-gradient(40%_40%_at_0%_100%,rgba(59,130,246,.12),transparent_70%)]">
+  <div class="pointer-events-none absolute -left-16 -top-16 h-72 w-72 animate-drift rounded-full bg-brand-500 opacity-[.35] blur-3xl"></div>
+  <div class="pointer-events-none absolute -right-24 top-24 h-96 w-96 animate-drift rounded-full bg-blue-500 opacity-[.35] blur-3xl [animation-delay:-6s]"></div>
+  <div class="relative mx-auto grid max-w-6xl items-center gap-12 px-4 py-16 md:grid-cols-2 md:py-24">
+    <div class="animate-popin">
+      <span data-i18n="hero_badge" class="inline-block rounded-full bg-brand-500/10 px-3 py-1 text-xs font-semibold text-brand-600 dark:text-brand-400"></span>
+      <h1 class="mt-5 text-4xl font-extrabold leading-[1.1] tracking-tight md:text-6xl">
+        <span data-i18n="hero_h1"></span><br />
+        <span id="typed" class="text-brand-500"></span><span class="ml-1 inline-block h-[.9em] w-[3px] animate-blink bg-brand-500 align-[-0.05em]"></span>
+      </h1>
+      <p data-i18n="hero_sub" class="mt-5 max-w-xl text-lg text-slate-600 dark:text-slate-400"></p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="#hisoblagich" data-i18n="hero_cta1" class="rounded-xl bg-brand-500 px-5 py-3 font-semibold text-white transition hover:-translate-y-0.5 hover:bg-brand-600"></a>
+        <a href="#mashqlar" data-i18n="hero_cta2" class="rounded-xl border border-slate-300 px-5 py-3 font-semibold transition hover:-translate-y-0.5 hover:bg-white dark:border-slate-700 dark:hover:bg-slate-900"></a>
+      </div>
+      <dl class="mt-10 grid max-w-md grid-cols-3 gap-4">
+        <div><dt data-i18n="stat_ex" class="text-xs text-slate-500"></dt><dd class="text-2xl font-extrabold"><span data-count="11">0</span></dd></div>
+        <div><dt data-i18n="stat_lvl" class="text-xs text-slate-500"></dt><dd class="text-2xl font-extrabold"><span data-count="3">0</span></dd></div>
+        <div><dt data-i18n="stat_tools" class="text-xs text-slate-500"></dt><dd class="text-2xl font-extrabold"><span data-count="8">0</span></dd></div>
+      </dl>
     </div>
-    <div class="space-y-5">
-     <div><div class="flex justify-between text-sm mb-2"><span class="text-gray-400">Qadam</span><span id="stP"></span></div>
-      <div class="h-2 bg-slate-800 rounded-full"><div id="stB" class="bar h-2 bg-green-400 rounded-full" style="width:0"></div></div>
-      <button data-a="step" class="mt-2 text-xs px-3 py-1.5 rounded-lg bg-green-400/10 text-green-400 hover:bg-green-400/20 transition">+500 qadam</button></div>
-     <div><div class="flex justify-between text-sm mb-2"><span class="text-gray-400">Suv <span id="wV" class="text-gray-500"></span></span><span id="wP"></span></div>
-      <div class="h-2 bg-slate-800 rounded-full"><div id="wB" class="bar h-2 bg-blue-400 rounded-full" style="width:0"></div></div>
-      <button data-a="water" class="mt-2 text-xs px-3 py-1.5 rounded-lg bg-blue-400/10 text-blue-400 hover:bg-blue-400/20 transition">+250 ml 💧</button></div>
-     <div><div class="flex justify-between text-sm mb-2"><span class="text-gray-400">Uyqu <span id="sV" class="text-gray-500"></span></span><span id="sP"></span></div>
-      <div class="h-2 bg-slate-800 rounded-full"><div id="sB" class="bar h-2 bg-purple-400 rounded-full" style="width:0"></div></div>
-      <div class="mt-2 flex gap-2"><button data-a="sleep+" class="text-xs px-3 py-1.5 rounded-lg bg-purple-400/10 text-purple-400 hover:bg-purple-400/20 transition">+0.5 soat</button>
-      <button data-a="sleep-" class="text-xs px-3 py-1.5 rounded-lg bg-white/5 text-gray-400 hover:bg-white/10 transition">−0.5</button></div></div>
+    <div class="animate-popin rounded-2xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-900/5 transition duration-300 hover:-translate-y-1 dark:border-slate-800 dark:bg-slate-900 [animation-delay:.15s]">
+      <div class="flex items-center justify-between gap-3">
+        <div>
+          <p data-i18n="sample" class="text-sm text-slate-500"></p>
+          <h3 id="heroName" class="text-xl font-bold"></h3>
+        </div>
+        <span class="rounded-full bg-brand-500/10 px-3 py-1 text-xs font-semibold text-brand-600 dark:text-brand-400"><span data-i18n="reps"></span>: <b id="heroReps">0</b></span>
+      </div>
+      <div id="heroFig" class="mt-4 h-64 rounded-2xl bg-slate-100 p-4 dark:bg-slate-800"></div>
+      <button id="heroPlay" type="button" data-i18n="watch_full" class="mt-4 w-full rounded-xl bg-slate-900 py-3 font-semibold text-white transition hover:opacity-90 dark:bg-white dark:text-slate-900"></button>
     </div>
-    <button data-a="reset" class="mt-6 w-full text-sm text-gray-500 hover:text-white transition">↺ Kunni qayta boshlash</button>
-   </div>
   </div>
- </div>
 </section>
 
-<!-- Stats -->
-<section class="border-y border-white/10 bg-slate-900/50">
- <div class="max-w-7xl mx-auto px-6 py-12 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-  <div><h2 class="text-3xl font-bold text-green-400"><span data-c="10000">0</span>+</h2><p class="text-gray-400 mt-2">Foydalanuvchilar</p></div>
-  <div><h2 class="text-3xl font-bold text-green-400"><span data-c="50">0</span>+</h2><p class="text-gray-400 mt-2">Mashqlar</p></div>
-  <div><h2 class="text-3xl font-bold text-green-400"><span data-c="100">0</span>+</h2><p class="text-gray-400 mt-2">Maslahatlar</p></div>
-  <div><h2 class="text-3xl font-bold text-green-400">24/7</h2><p class="text-gray-400 mt-2">Motivatsiya</p></div>
- </div>
-</section>
-
-<!-- Sport -->
-<section id="sport" class="max-w-7xl mx-auto px-6 py-20">
- <div class="text-center max-w-2xl mx-auto mb-10 rv">
-  <p class="text-green-400 font-semibold">SPORT</p>
-  <h2 class="text-4xl font-bold mt-2">O‘zingizga mos sportni tanlang</h2>
-  <p class="text-gray-400 mt-4">Turni tanlang, kartani bosing — mashqlar va taymer ochiladi.</p>
- </div>
- <div id="filters" class="flex flex-wrap justify-center gap-3 mb-10"></div>
- <div id="grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-</section>
-
-<!-- BMI -->
-<section id="bmi" class="bg-slate-900">
- <div class="max-w-7xl mx-auto px-6 py-20 grid lg:grid-cols-2 gap-14 items-center">
-  <div class="rv">
-   <p class="text-green-400 font-semibold">SOG‘LIQ</p>
-   <h2 class="text-4xl font-bold mt-3">Tana massasi indeksi (BMI)</h2>
-   <p class="text-gray-400 mt-5">Bo‘y va vazningizni kiriting — natija darhol chiqadi. Bu faqat taxminiy ko‘rsatkich, aniq xulosa uchun shifokorga murojaat qiling.</p>
+<!-- DASHBOARD -->
+<section id="panel" class="scroll-mt-20 border-y border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+  <div class="mx-auto max-w-6xl px-4 py-14">
+    <h2 data-i18n="dash_title" class="text-2xl font-extrabold md:text-3xl"></h2>
+    <div class="mt-6 grid grid-cols-2 gap-4 md:grid-cols-4">
+      <div class="rounded-2xl bg-slate-50 p-4 dark:bg-slate-950"><p data-i18n="dash_kcal" class="text-xs text-slate-500"></p><p id="dkKcal" class="mt-1 text-2xl font-extrabold">—</p><p id="dkKcalSub" class="text-xs text-slate-500"></p></div>
+      <div class="rounded-2xl bg-slate-50 p-4 dark:bg-slate-950"><p data-i18n="dash_eaten" class="text-xs text-slate-500"></p><p id="dkEaten" class="mt-1 text-2xl font-extrabold">0</p><p id="dkEatenSub" class="text-xs text-slate-500"></p></div>
+      <div class="rounded-2xl bg-slate-50 p-4 dark:bg-slate-950"><p data-i18n="protein" class="text-xs text-slate-500"></p><p id="dkProt" class="mt-1 text-2xl font-extrabold">0 g</p><p id="dkProtSub" class="text-xs text-slate-500"></p></div>
+      <div class="rounded-2xl bg-slate-50 p-4 dark:bg-slate-950"><p data-i18n="dash_water" class="text-xs text-slate-500"></p><p id="dkWater" class="mt-1 text-2xl font-extrabold">0</p><p data-i18n="glasses" class="text-xs text-slate-500"></p></div>
+      <div class="rounded-2xl bg-slate-50 p-4 dark:bg-slate-950"><p data-i18n="dash_week" class="text-xs text-slate-500"></p><p id="dkWeek" class="mt-1 text-2xl font-extrabold">0</p><p id="dkWeekSub" class="text-xs text-slate-500"></p></div>
+      <div class="rounded-2xl bg-slate-50 p-4 dark:bg-slate-950"><p data-i18n="dash_streak" class="text-xs text-slate-500"></p><p id="dkStreak" class="mt-1 text-2xl font-extrabold">0</p><p data-i18n="dash_days" class="text-xs text-slate-500"></p></div>
+      <div class="rounded-2xl bg-slate-50 p-4 dark:bg-slate-950"><p data-i18n="dash_weight" class="text-xs text-slate-500"></p><p id="dkWeight" class="mt-1 text-2xl font-extrabold">—</p><p id="dkWeightSub" class="text-xs text-slate-500"></p></div>
+      <div class="rounded-2xl bg-slate-50 p-4 dark:bg-slate-950"><p data-i18n="dash_habits" class="text-xs text-slate-500"></p><p id="dkHabits" class="mt-1 text-2xl font-extrabold">0/0</p><p data-i18n="dash_today" class="text-xs text-slate-500"></p></div>
+    </div>
+    <div class="mt-6 rounded-2xl border border-brand-500/30 bg-brand-500/10 p-5">
+      <p data-i18n="coach_title" class="text-sm font-bold text-brand-700 dark:text-brand-400"></p>
+      <p id="coachMsg" class="mt-2 text-sm md:text-base"></p>
+    </div>
   </div>
-  <div class="rv bg-slate-950 border border-white/10 rounded-2xl p-7">
-   <div class="grid grid-cols-2 gap-4">
-    <label class="text-sm text-gray-400">Bo‘y (sm)<input id="bh" type="number" min="100" max="250" placeholder="175" class="mt-2 w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-green-400"></label>
-    <label class="text-sm text-gray-400">Vazn (kg)<input id="bw" type="number" min="20" max="300" placeholder="70" class="mt-2 w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-green-400"></label>
-   </div>
-   <button id="bcalc" class="mt-5 w-full bg-green-400 text-slate-950 font-semibold py-3 rounded-xl hover:bg-green-300 transition">Hisoblash</button>
-   <div id="bres" class="hidden mt-6">
-    <div class="flex items-end justify-between"><span id="bv" class="text-5xl font-bold"></span><span id="bt" class="font-semibold"></span></div>
-    <div class="relative mt-4 h-3 rounded-full" style="background:linear-gradient(90deg,#60a5fa 0 20%,#4ade80 20% 50%,#facc15 50% 70%,#f87171 70%)">
-     <div id="bm" class="bar absolute -top-1 w-1.5 h-5 bg-white rounded" style="left:0"></div></div>
-    <p id="bd" class="text-gray-400 text-sm mt-4"></p>
-   </div>
+</section>
+
+<!-- CALCULATOR -->
+<section id="hisoblagich" class="mx-auto max-w-6xl scroll-mt-20 px-4 py-20">
+  <div class="reveal mb-10 opacity-0 translate-y-7 transition duration-700">
+    <h2 data-i18n="calc_title" class="text-3xl font-extrabold md:text-4xl"></h2>
+    <p data-i18n="calc_sub" class="mt-2 text-slate-600 dark:text-slate-400"></p>
   </div>
- </div>
+  <div class="grid gap-6 lg:grid-cols-5">
+    <form id="calcForm" class="reveal space-y-4 rounded-2xl border border-slate-200 bg-white p-6 opacity-0 translate-y-7 transition duration-700 lg:col-span-2 dark:border-slate-800 dark:bg-slate-900">
+      <div class="grid grid-cols-2 gap-4">
+        <label><span data-i18n="f_age" class="block text-sm font-medium text-slate-600 dark:text-slate-400"></span>
+          <input id="age" type="number" value="25" min="14" max="100" class="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-slate-900 outline-none focus:ring-2 focus:ring-brand-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" /></label>
+        <label><span data-i18n="f_sex" class="block text-sm font-medium text-slate-600 dark:text-slate-400"></span>
+          <select id="sex" class="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-slate-900 outline-none focus:ring-2 focus:ring-brand-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100">
+            <option value="male" data-i18n="male"></option>
+            <option value="female" data-i18n="female"></option>
+          </select></label>
+        <label><span data-i18n="f_weight" class="block text-sm font-medium text-slate-600 dark:text-slate-400"></span>
+          <input id="weight" type="number" value="75" min="30" max="300" class="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-slate-900 outline-none focus:ring-2 focus:ring-brand-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" /></label>
+        <label><span data-i18n="f_height" class="block text-sm font-medium text-slate-600 dark:text-slate-400"></span>
+          <input id="height" type="number" value="175" min="120" max="230" class="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-slate-900 outline-none focus:ring-2 focus:ring-brand-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" /></label>
+      </div>
+      <label class="block"><span data-i18n="f_act" class="block text-sm font-medium text-slate-600 dark:text-slate-400"></span>
+        <select id="activity" class="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-slate-900 outline-none focus:ring-2 focus:ring-brand-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100">
+          <option value="1.2" data-i18n="act1"></option>
+          <option value="1.375" data-i18n="act2"></option>
+          <option value="1.55" selected data-i18n="act3"></option>
+          <option value="1.725" data-i18n="act4"></option>
+        </select></label>
+      <label class="block"><span data-i18n="f_goal" class="block text-sm font-medium text-slate-600 dark:text-slate-400"></span>
+        <select id="goal" class="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-slate-900 outline-none focus:ring-2 focus:ring-brand-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100">
+          <option value="lose" data-i18n="g_lose"></option>
+          <option value="keep" data-i18n="g_keep"></option>
+          <option value="gain" data-i18n="g_gain"></option>
+        </select></label>
+      <p id="formError" class="hidden text-sm text-red-500"></p>
+      <button type="submit" data-i18n="calc_btn" class="w-full rounded-xl bg-brand-500 py-3 font-semibold text-white transition hover:-translate-y-0.5 hover:bg-brand-600"></button>
+    </form>
+
+    <div id="result" class="reveal min-h-[360px] rounded-2xl border border-slate-200 bg-white p-6 opacity-0 translate-y-7 transition duration-700 lg:col-span-3 dark:border-slate-800 dark:bg-slate-900"></div>
+  </div>
+
+  <div class="reveal mt-6 rounded-2xl border border-slate-200 bg-white p-6 opacity-0 translate-y-7 transition duration-700 dark:border-slate-800 dark:bg-slate-900">
+    <div class="flex items-center justify-between gap-3">
+      <h3 data-i18n="hist_title" class="text-lg font-bold"></h3>
+      <button id="clearHist" type="button" data-i18n="clear" class="text-sm text-red-500 hover:underline"></button>
+    </div>
+    <ul id="histList" class="mt-4 grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-3"></ul>
+    <p id="histEmpty" data-i18n="hist_empty" class="mt-2 text-sm text-slate-500"></p>
+  </div>
 </section>
 
-<!-- Tips -->
-<section id="tips" class="max-w-3xl mx-auto px-6 py-20">
- <div class="mb-10 rv"><p class="text-green-400 font-semibold">MASLAHATLAR</p>
-  <h2 class="text-4xl font-bold mt-2">Har kuni foydali odatlar</h2></div>
- <div id="acc" class="space-y-3"></div>
+<!-- TOOLS -->
+<section id="vositalar" class="scroll-mt-20 border-y border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+  <div class="mx-auto max-w-6xl px-4 py-20">
+    <h2 data-i18n="nav_tools" class="mb-8 text-3xl font-extrabold md:text-4xl"></h2>
+    <div class="grid gap-6 lg:grid-cols-2">
+
+      <div class="reveal rounded-2xl border border-slate-200 bg-white p-6 opacity-0 translate-y-7 transition duration-700 dark:border-slate-800 dark:bg-slate-950">
+        <div class="flex items-center justify-between gap-3">
+          <h3 data-i18n="tools_water" class="text-xl font-bold"></h3>
+          <span id="waterText" class="text-sm text-slate-500"></span>
+        </div>
+        <div id="glasses" class="mt-5 grid grid-cols-6 gap-2 sm:grid-cols-8"></div>
+        <div class="mt-5 h-3 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div id="waterBar" class="h-full rounded-full bg-gradient-to-r from-sky-400 to-blue-500 transition-all duration-500"></div></div>
+        <div class="mt-5 flex gap-2">
+          <button id="waterAdd" type="button" data-i18n="water_add" class="flex-1 rounded-xl bg-sky-500 py-2.5 font-semibold text-white transition hover:bg-sky-600"></button>
+          <button id="waterSub" type="button" class="rounded-xl border border-slate-300 px-4 font-semibold dark:border-slate-700">−</button>
+          <button id="waterReset" type="button" data-i18n="water_reset" class="rounded-xl border border-slate-300 px-4 font-semibold dark:border-slate-700"></button>
+        </div>
+        <p class="mt-3 text-xs text-slate-500"><span data-i18n="water_goal"></span>: <span id="waterGoalTxt"></span>. <span data-i18n="water_hint"></span></p>
+      </div>
+
+      <div class="reveal rounded-2xl border border-slate-200 bg-white p-6 opacity-0 translate-y-7 transition duration-700 dark:border-slate-800 dark:bg-slate-950">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <h3 data-i18n="tools_timer" class="text-xl font-bold"></h3>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" class="rounded-full border px-3 py-2 text-xs font-semibold transition hover:-translate-y-px" data-preset="0"></button>
+            <button type="button" class="rounded-full border px-3 py-2 text-xs font-semibold transition hover:-translate-y-px" data-preset="30"></button>
+            <button type="button" class="rounded-full border px-3 py-2 text-xs font-semibold transition hover:-translate-y-px" data-preset="60"></button>
+            <button type="button" class="rounded-full border px-3 py-2 text-xs font-semibold transition hover:-translate-y-px" data-preset="90"></button>
+          </div>
+        </div>
+        <div id="clock" class="mt-6 text-center text-6xl font-extrabold tabular-nums md:text-7xl">00:00</div>
+        <div class="mt-6 flex justify-center gap-3">
+          <button id="tStart" type="button" class="rounded-xl bg-brand-500 px-8 py-3 font-semibold text-white transition hover:bg-brand-600"></button>
+          <button id="tReset" type="button" data-i18n="reset" class="rounded-xl border border-slate-300 px-6 py-3 font-semibold dark:border-slate-700"></button>
+        </div>
+        <div class="mt-5 flex gap-2">
+          <input id="tCustom" type="number" min="5" max="3600" value="45" data-i18n-ph="custom_ph" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none focus:ring-2 focus:ring-brand-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" />
+          <button id="tSet" type="button" data-i18n="set_btn" class="rounded-xl border border-slate-300 px-4 font-semibold dark:border-slate-700"></button>
+        </div>
+        <p data-i18n="timer_hint" class="mt-4 text-center text-sm text-slate-500"></p>
+      </div>
+
+      <div class="reveal rounded-2xl border border-slate-200 bg-white p-6 opacity-0 translate-y-7 transition duration-700 dark:border-slate-800 dark:bg-slate-950">
+        <div class="flex items-center justify-between gap-3">
+          <h3 data-i18n="tools_habits" class="text-xl font-bold"></h3>
+          <span id="habitStat" class="text-sm text-slate-500"></span>
+        </div>
+        <ul id="habitList" class="mt-4 space-y-2 text-sm"></ul>
+        <form id="habitForm" class="mt-4 flex gap-2">
+          <input id="habitInput" type="text" maxlength="40" data-i18n-ph="habit_ph" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none focus:ring-2 focus:ring-brand-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" />
+          <button type="submit" data-i18n="add" class="rounded-xl bg-brand-500 px-4 font-semibold text-white transition hover:bg-brand-600"></button>
+        </form>
+      </div>
+
+      <div class="reveal rounded-2xl border border-slate-200 bg-white p-6 opacity-0 translate-y-7 transition duration-700 dark:border-slate-800 dark:bg-slate-950">
+        <h3 data-i18n="tools_1rm" class="text-xl font-bold"></h3>
+        <div class="mt-4 grid grid-cols-2 gap-4">
+          <label><span data-i18n="rm_w" class="block text-sm font-medium text-slate-600 dark:text-slate-400"></span>
+            <input id="rmW" type="number" value="60" min="1" class="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-slate-900 outline-none focus:ring-2 focus:ring-brand-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" /></label>
+          <label><span data-i18n="rm_r" class="block text-sm font-medium text-slate-600 dark:text-slate-400"></span>
+            <input id="rmR" type="number" value="8" min="1" max="30" class="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-slate-900 outline-none focus:ring-2 focus:ring-brand-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" /></label>
+        </div>
+        <div id="rmOut" class="mt-5"></div>
+      </div>
+
+    </div>
+  </div>
 </section>
 
-<!-- CTA -->
-<section class="max-w-7xl mx-auto px-6 pb-20">
- <div class="bg-green-400 rounded-3xl p-10 md:p-14 text-slate-950 text-center rv">
-  <h2 class="text-3xl md:text-4xl font-bold">Sog‘lom hayot bugundan boshlanadi.</h2>
-  <p class="mt-4 max-w-xl mx-auto">Har kuni kichik bir qadam tashlang va yaxshi odatlarni hayotingizning bir qismiga aylantiring.</p>
-  <button onclick="openSignup()" class="mt-7 bg-slate-950 text-white px-7 py-3 rounded-xl font-semibold hover:bg-slate-800 transition">Ro‘yxatdan o‘tish</button>
- </div>
-</section>
-</main>
+<!-- JOURNAL: nutrition, workouts, weight -->
+<section id="jurnal" class="mx-auto max-w-6xl scroll-mt-20 px-4 py-20">
+  <h2 data-i18n="nav_journal" class="reveal mb-8 text-3xl font-extrabold opacity-0 translate-y-7 transition duration-700 md:text-4xl"></h2>
+  <div class="grid gap-6 lg:grid-cols-2">
 
-<footer class="border-t border-white/10">
- <div class="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between gap-4">
-  <div><h2 class="text-xl font-bold">Fit<span class="text-green-400">Life</span></h2><p class="text-gray-500 text-sm mt-2">Sog‘lom hayot sari birgalikda.</p></div>
-  <p class="text-gray-500 text-sm">© 2026 FitLife. Barcha huquqlar himoyalangan.</p>
- </div>
+    <div class="reveal rounded-2xl border border-slate-200 bg-white p-6 opacity-0 translate-y-7 transition duration-700 dark:border-slate-800 dark:bg-slate-900">
+      <h3 data-i18n="food_title" class="text-xl font-bold"></h3>
+      <form id="foodForm" class="mt-4 flex flex-wrap items-end gap-3">
+        <label class="min-w-[10rem] flex-1"><span data-i18n="food_item" class="block text-sm font-medium text-slate-600 dark:text-slate-400"></span>
+          <select id="foodSel" class="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-slate-900 outline-none focus:ring-2 focus:ring-brand-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"></select></label>
+        <label class="w-24"><span data-i18n="food_qty" class="block text-sm font-medium text-slate-600 dark:text-slate-400"></span>
+          <input id="foodQty" type="number" value="1" min="0.5" max="20" step="0.5" class="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-slate-900 outline-none focus:ring-2 focus:ring-brand-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" /></label>
+        <button type="submit" data-i18n="add" class="rounded-xl bg-brand-500 px-5 py-2.5 font-semibold text-white transition hover:bg-brand-600"></button>
+      </form>
+      <div class="mt-5 grid grid-cols-4 gap-2 text-center text-sm">
+        <div class="rounded-xl bg-slate-50 p-3 dark:bg-slate-800"><p data-i18n="kcal" class="text-xs text-slate-500"></p><p id="fKcal" class="font-extrabold">0</p></div>
+        <div class="rounded-xl bg-slate-50 p-3 dark:bg-slate-800"><p data-i18n="protein" class="text-xs text-slate-500"></p><p id="fP" class="font-extrabold">0 g</p></div>
+        <div class="rounded-xl bg-slate-50 p-3 dark:bg-slate-800"><p data-i18n="fat" class="text-xs text-slate-500"></p><p id="fF" class="font-extrabold">0 g</p></div>
+        <div class="rounded-xl bg-slate-50 p-3 dark:bg-slate-800"><p data-i18n="carb" class="text-xs text-slate-500"></p><p id="fC" class="font-extrabold">0 g</p></div>
+      </div>
+      <div class="mt-4 h-3 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div id="fBar" class="h-full rounded-full bg-brand-500 transition-all duration-500"></div></div>
+      <p id="fTxt" class="mt-2 text-xs text-slate-500"></p>
+      <ul id="fList" class="mt-4 space-y-2 text-sm"></ul>
+      <p id="fEmpty" data-i18n="food_empty" class="mt-2 text-sm text-slate-500"></p>
+    </div>
+
+    <div class="reveal rounded-2xl border border-slate-200 bg-white p-6 opacity-0 translate-y-7 transition duration-700 dark:border-slate-800 dark:bg-slate-900">
+      <h3 data-i18n="journal_title" class="text-xl font-bold"></h3>
+      <form id="jForm" class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <label class="col-span-2"><span data-i18n="j_ex" class="block text-sm font-medium text-slate-600 dark:text-slate-400"></span>
+          <select id="jEx" class="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-slate-900 outline-none focus:ring-2 focus:ring-brand-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"></select></label>
+        <label><span data-i18n="j_sets" class="block text-sm font-medium text-slate-600 dark:text-slate-400"></span>
+          <input id="jSets" type="number" value="3" min="1" max="20" class="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-slate-900 outline-none focus:ring-2 focus:ring-brand-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" /></label>
+        <label><span data-i18n="j_reps" class="block text-sm font-medium text-slate-600 dark:text-slate-400"></span>
+          <input id="jReps" type="number" value="10" min="1" max="300" class="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-slate-900 outline-none focus:ring-2 focus:ring-brand-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" /></label>
+        <label class="col-span-2"><span data-i18n="j_wt" class="block text-sm font-medium text-slate-600 dark:text-slate-400"></span>
+          <input id="jWt" type="number" min="0" max="500" value="" class="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-slate-900 outline-none focus:ring-2 focus:ring-brand-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" /></label>
+        <button type="submit" data-i18n="j_add" class="col-span-2 self-end rounded-xl bg-brand-500 py-2.5 font-semibold text-white transition hover:bg-brand-600 sm:col-span-2"></button>
+      </form>
+      <p id="jWeek" class="mt-4 text-sm font-semibold text-brand-600 dark:text-brand-400"></p>
+      <ul id="jList" class="mt-3 max-h-72 space-y-2 overflow-y-auto text-sm"></ul>
+      <p id="jEmpty" data-i18n="j_empty" class="mt-2 text-sm text-slate-500"></p>
+    </div>
+
+    <div class="reveal rounded-2xl border border-slate-200 bg-white p-6 opacity-0 translate-y-7 transition duration-700 lg:col-span-2 dark:border-slate-800 dark:bg-slate-900">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <h3 data-i18n="w_title" class="text-xl font-bold"></h3>
+        <div class="text-right text-sm"><p id="wChange" class="font-semibold"></p><p id="wLatest" class="text-slate-500"></p></div>
+      </div>
+      <form id="wForm" class="mt-4 flex flex-wrap items-end gap-3">
+        <label><span data-i18n="w_date" class="block text-sm font-medium text-slate-600 dark:text-slate-400"></span>
+          <input id="wDate" type="date" class="mt-1.5 rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-slate-900 outline-none focus:ring-2 focus:ring-brand-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" /></label>
+        <label><span data-i18n="w_kg" class="block text-sm font-medium text-slate-600 dark:text-slate-400"></span>
+          <input id="wKg" type="number" step="0.1" min="20" max="400" class="mt-1.5 w-40 rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-slate-900 outline-none focus:ring-2 focus:ring-brand-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" /></label>
+        <button type="submit" data-i18n="w_save" class="rounded-xl bg-brand-500 px-5 py-2.5 font-semibold text-white transition hover:bg-brand-600"></button>
+      </form>
+      <div id="wChart" class="mt-6 rounded-xl bg-slate-50 p-4 text-slate-400 dark:bg-slate-950"></div>
+      <p id="wNone" data-i18n="w_none" class="mt-3 text-sm text-slate-500"></p>
+      <ul id="wList" class="mt-4 grid gap-2 text-sm sm:grid-cols-2"></ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- EXERCISES -->
+<section id="mashqlar" class="mx-auto max-w-6xl scroll-mt-20 px-4 py-20">
+  <div class="reveal mb-10 flex flex-col gap-6 opacity-0 translate-y-7 transition duration-700 xl:flex-row xl:items-end xl:justify-between">
+    <div>
+      <h2 data-i18n="ex_title" class="text-3xl font-extrabold md:text-4xl"></h2>
+      <p data-i18n="ex_sub" class="mt-2 text-slate-600 dark:text-slate-400"></p>
+    </div>
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+      <input id="search" type="search" data-i18n-ph="search_ph" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-slate-900 outline-none focus:ring-2 focus:ring-brand-500 sm:w-60 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" />
+      <div class="flex flex-wrap gap-2">
+        <button type="button" class="rounded-full border px-4 py-2 text-sm font-semibold transition hover:-translate-y-px" data-filter="all" data-i18n="f_all"></button>
+        <button type="button" class="rounded-full border px-4 py-2 text-sm font-semibold transition hover:-translate-y-px" data-filter="kuch" data-i18n="f_kuch"></button>
+        <button type="button" class="rounded-full border px-4 py-2 text-sm font-semibold transition hover:-translate-y-px" data-filter="kardio" data-i18n="f_kardio"></button>
+        <button type="button" class="rounded-full border px-4 py-2 text-sm font-semibold transition hover:-translate-y-px" data-filter="cozilish" data-i18n="f_coz"></button>
+        <button type="button" class="rounded-full border px-4 py-2 text-sm font-semibold transition hover:-translate-y-px" data-filter="fav" data-i18n="f_fav"></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="reveal mb-8 rounded-2xl border border-slate-200 bg-white p-5 opacity-0 translate-y-7 transition duration-700 dark:border-slate-800 dark:bg-slate-900">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <div>
+        <h3 data-i18n="random_title" class="text-lg font-bold"></h3>
+        <p data-i18n="random_hint" class="text-sm text-slate-500"></p>
+      </div>
+      <button id="randomBtn" type="button" data-i18n="random_btn" class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold transition hover:-translate-y-px dark:border-slate-700"></button>
+    </div>
+    <ul id="randomList" class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5"></ul>
+  </div>
+
+  <div id="exerciseGrid" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+  <p id="emptyMsg" data-i18n="ex_none" class="mt-10 hidden text-center text-slate-500"></p>
+</section>
+
+<!-- TIPS -->
+<section id="maslahat" class="scroll-mt-20">
+  <div class="mx-auto max-w-6xl px-4 py-20">
+    <h2 data-i18n="tips_title" class="mb-8 text-3xl font-extrabold md:text-4xl"></h2>
+    <div class="grid gap-6 md:grid-cols-4">
+      <div class="reveal rounded-2xl border border-slate-200 bg-white p-6 opacity-0 translate-y-7 transition duration-700 dark:border-slate-800 dark:bg-slate-900">
+        <div class="text-3xl">😴</div><h3 data-i18n="tip_sleep_t" class="mt-3 text-lg font-bold"></h3><p data-i18n="tip_sleep_b" class="mt-2 text-sm text-slate-600 dark:text-slate-300"></p>
+      </div>
+      <div class="reveal rounded-2xl border border-slate-200 bg-white p-6 opacity-0 translate-y-7 transition duration-700 dark:border-slate-800 dark:bg-slate-900">
+        <div class="text-3xl">💧</div><h3 data-i18n="tip_water_t" class="mt-3 text-lg font-bold"></h3><p data-i18n="tip_water_b" class="mt-2 text-sm text-slate-600 dark:text-slate-300"></p>
+      </div>
+      <div class="reveal rounded-2xl border border-slate-200 bg-white p-6 opacity-0 translate-y-7 transition duration-700 dark:border-slate-800 dark:bg-slate-900">
+        <div class="text-3xl">🔥</div><h3 data-i18n="tip_warm_t" class="mt-3 text-lg font-bold"></h3><p data-i18n="tip_warm_b" class="mt-2 text-sm text-slate-600 dark:text-slate-300"></p>
+      </div>
+      <div class="reveal rounded-2xl border border-slate-200 bg-white p-6 opacity-0 translate-y-7 transition duration-700 dark:border-slate-800 dark:bg-slate-900">
+        <div class="text-3xl">🥚</div><h3 data-i18n="tip_prot_t" class="mt-3 text-lg font-bold"></h3><p data-i18n="tip_prot_b" class="mt-2 text-sm text-slate-600 dark:text-slate-300"></p>
+      </div>
+    </div>
+
+    <h3 data-i18n="faq_title" class="mb-4 mt-12 text-xl font-bold"></h3>
+    <div class="grid gap-3">
+      <details class="group rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+        <summary data-i18n="faq1_q" class="cursor-pointer font-semibold"></summary><p data-i18n="faq1_a" class="mt-2 text-sm text-slate-600 dark:text-slate-300"></p>
+      </details>
+      <details class="group rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+        <summary data-i18n="faq2_q" class="cursor-pointer font-semibold"></summary><p data-i18n="faq2_a" class="mt-2 text-sm text-slate-600 dark:text-slate-300"></p>
+      </details>
+      <details class="group rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+        <summary data-i18n="faq3_q" class="cursor-pointer font-semibold"></summary><p data-i18n="faq3_a" class="mt-2 text-sm text-slate-600 dark:text-slate-300"></p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- DATA -->
+<section id="data" class="mx-auto max-w-6xl px-4 pb-10 print:hidden">
+  <div class="rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
+    <h3 data-i18n="data_title" class="text-lg font-bold"></h3>
+    <p data-i18n="data_sub" class="mt-1 text-sm text-slate-500"></p>
+    <div class="mt-4 flex flex-wrap gap-2">
+      <button id="exportBtn" type="button" data-i18n="exp_btn" class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold dark:border-slate-700"></button>
+      <button id="importBtn" type="button" data-i18n="imp_btn" class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold dark:border-slate-700"></button>
+      <input id="importFile" type="file" accept="application/json,.json" class="hidden" />
+      <button id="printBtn" type="button" data-i18n="print_btn" class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold dark:border-slate-700"></button>
+      <button id="wipeBtn" type="button" data-i18n="wipe" class="rounded-xl border border-red-300 px-4 py-2 text-sm font-semibold text-red-500 dark:border-red-900"></button>
+    </div>
+  </div>
+</section>
+
+<footer class="mx-auto flex max-w-6xl flex-col justify-between gap-3 px-4 py-10 text-sm text-slate-500 md:flex-row">
+  <span data-i18n="footer_copy"></span>
+  <span data-i18n="footer_disc"></span>
 </footer>
 
-<!-- Modal / Toast / Top -->
-<div id="md" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
- <div id="mb" class="pop relative w-full max-w-md max-h-[90vh] overflow-y-auto bg-slate-900 border border-white/10 rounded-2xl p-7">
-  <button id="mx" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/5 hover:bg-white/10" aria-label="Yopish">✕</button>
-  <div id="mc"></div>
- </div>
+<button id="toTop" type="button" class="pointer-events-none fixed bottom-6 right-6 z-40 grid h-11 w-11 translate-y-4 place-items-center rounded-full bg-brand-500 text-white opacity-0 shadow-lg transition-all duration-300 print:hidden">↑</button>
+
+<!-- EXERCISE PLAYER -->
+<div id="playerModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm print:hidden">
+  <div class="animate-popin max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-3xl bg-white p-5 shadow-2xl md:p-7 dark:bg-slate-900">
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h3 id="pTitle" class="text-2xl font-extrabold"></h3>
+        <p id="pSub" class="mt-1 text-sm text-slate-500"></p>
+      </div>
+      <button id="pClose" type="button" class="text-3xl leading-none text-slate-500 hover:text-slate-800 dark:hover:text-white" aria-label="Close">×</button>
+    </div>
+    <div class="mt-5 grid gap-6 md:grid-cols-5">
+      <div class="md:col-span-3">
+        <div id="pFig" class="aspect-square rounded-2xl bg-slate-100 p-4 dark:bg-slate-800"></div>
+        <div class="mt-4 h-2 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div id="pBar" class="h-full bg-brand-500"></div></div>
+        <div class="mt-4 flex flex-wrap items-center gap-2">
+          <button id="pPrev" type="button" class="rounded-full border px-4 py-2 text-sm font-semibold transition" aria-label="Prev">⏮</button>
+          <button id="pPlay" type="button" class="min-w-[7rem] rounded-xl bg-brand-500 px-5 py-2 font-semibold text-white transition hover:bg-brand-600"></button>
+          <button id="pNext" type="button" class="rounded-full border px-4 py-2 text-sm font-semibold transition" aria-label="Next">⏭</button>
+          <button id="pReset" type="button" class="rounded-full border px-4 py-2 text-sm font-semibold transition" aria-label="Reset">↺</button>
+          <div class="ml-auto flex gap-1">
+            <button type="button" class="rounded-full border px-3 py-2 text-xs font-semibold transition" data-speed="0.5">0.5×</button>
+            <button type="button" class="rounded-full border px-3 py-2 text-xs font-semibold transition" data-speed="1">1×</button>
+            <button type="button" class="rounded-full border px-3 py-2 text-xs font-semibold transition" data-speed="1.5">1.5×</button>
+          </div>
+        </div>
+        <div class="mt-3 flex flex-wrap items-center gap-3 text-sm">
+          <p><span data-i18n="p_reps"></span>: <b id="pReps">0</b></p>
+          <button id="pLog" type="button" data-i18n="p_log" class="rounded-xl border border-slate-300 px-3 py-1.5 text-xs font-semibold dark:border-slate-700"></button>
+        </div>
+        <p id="pHint" class="mt-2 text-xs text-slate-500"></p>
+      </div>
+      <div class="md:col-span-2">
+        <h4 data-i18n="p_steps" class="font-bold"></h4>
+        <ol id="pSteps" class="mt-3 space-y-3 text-sm"></ol>
+        <a id="pYt" href="#" target="_blank" rel="noopener" class="mt-5 inline-block text-sm font-semibold text-brand-600 hover:underline dark:text-brand-400"></a>
+      </div>
+    </div>
+    <p id="pDisc" class="mt-5 text-xs text-slate-500"></p>
+  </div>
 </div>
-<div id="ts" class="fixed left-1/2 -translate-x-1/2 z-[60] hidden px-5 py-3 rounded-xl bg-white text-slate-950 font-medium shadow-xl" style="bottom:calc(env(safe-area-inset-bottom,0px) + 24px)"></div>
-<button id="up" class="hidden fixed right-5 z-40 w-12 h-12 rounded-full bg-green-400 text-slate-950 text-xl shadow-lg hover:bg-green-300" style="bottom:calc(env(safe-area-inset-bottom,0px) + 24px)" aria-label="Tepaga">↑</button>
+
+<!-- LOGIN MODAL -->
+<div id="authModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm print:hidden">
+  <div class="animate-popin w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl dark:bg-slate-900">
+    <div class="flex items-center justify-between">
+      <h3 data-i18n="auth_title" class="text-xl font-bold"></h3>
+      <button id="closeModal" type="button" class="text-2xl leading-none text-slate-500" aria-label="Close">×</button>
+    </div>
+    <form id="loginForm" class="mt-5 space-y-4">
+      <label class="block"><span data-i18n="email_l" class="block text-sm font-medium text-slate-600 dark:text-slate-400"></span>
+        <input id="email" type="email" required placeholder="you@email.uz" class="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-slate-900 outline-none focus:ring-2 focus:ring-brand-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" /></label>
+      <label class="block"><span data-i18n="pass_l" class="block text-sm font-medium text-slate-600 dark:text-slate-400"></span>
+        <input id="pass" type="password" required placeholder="••••" class="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-slate-900 outline-none focus:ring-2 focus:ring-brand-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" /></label>
+      <p id="loginErr" class="hidden text-sm text-red-500"></p>
+      <button type="submit" data-i18n="login_btn" class="w-full rounded-xl bg-brand-500 py-3 font-semibold text-white transition hover:bg-brand-600"></button>
+      <p data-i18n="demo_note" class="text-center text-xs text-slate-500"></p>
+    </form>
+  </div>
+</div>
+
+<div id="toast" class="fixed bottom-6 left-1/2 z-[70] -translate-x-1/2 translate-y-[150%] rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-xl transition duration-300 print:hidden dark:bg-white dark:text-slate-900"></div>
 
 <script>
-const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-let tt;function toast(m){const t=$('#ts');t.textContent=m;t.classList.remove('hidden');clearTimeout(tt);tt=setTimeout(()=>t.classList.add('hidden'),2400)}
+/* =========================================================
+   Helpers and storage
+   ========================================================= */
+const $ = (id) => document.getElementById(id);
+const KEY = 'fitlife-';
+const LEG_MS = 1400;
+const store = {
+  get(k) { try { return localStorage.getItem(KEY + k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(KEY + k, v); } catch (e) {} },
+  del(k) { try { localStorage.removeItem(KEY + k); } catch (e) {} }
+};
+const load = (k, d) => { try { return JSON.parse(store.get(k)) ?? d; } catch (e) { return d; } };
+const save = (k, v) => store.set(k, JSON.stringify(v));
+const pad = (n) => String(n).padStart(2, '0');
+const today = () => new Date().toLocaleDateString('sv-SE');
+function addDays(s, n) { const d = new Date(s + 'T00:00'); d.setDate(d.getDate() + n); return d.toLocaleDateString('sv-SE'); }
 
-/* Tracker */
-const G={step:10000,water:2000,sleep:8};
-let S={step:8420,water:1400,sleep:7};
-try{const x=JSON.parse(localStorage.getItem('fitlife')||'null');if(x)S=x}catch(e){}
-const save=()=>{try{localStorage.setItem('fitlife',JSON.stringify(S))}catch(e){}};
-const pc=(v,g)=>Math.min(100,Math.round(v/g*100));
-function draw(){
- $('#stV').textContent=S.step.toLocaleString('en-US').replace(/,/g,' ');
- [['st','step'],['w','water'],['s','sleep']].forEach(([k,n])=>{const p=pc(S[n],G[n]);$('#'+k+'B').style.width=p+'%';$('#'+k+'P').textContent=p+'%'});
- $('#wV').textContent='('+S.water+' ml)';$('#sV').textContent='('+S.sleep+' soat)';save()}
-const done={};
-function chk(n,msg){if(S[n]>=G[n]&&!done[n]){done[n]=1;toast('🎉 '+msg)}if(S[n]<G[n])done[n]=0}
-$$('[data-a]').forEach(b=>b.onclick=()=>{
- const a=b.dataset.a;
- if(a=='step'){S.step+=500;chk('step','Qadam maqsadiga erishdingiz!')}
- if(a=='water'){S.water+=250;chk('water','Kunlik suv me’yori bajarildi!')}
- if(a=='sleep+'){S.sleep=Math.min(12,S.sleep+.5);chk('sleep','Yetarli uyqu — ajoyib!')}
- if(a=='sleep-')S.sleep=Math.max(0,S.sleep-.5);
- if(a=='reset'){S={step:0,water:0,sleep:0};toast('Yangi kun boshlandi')}
- draw()});
-draw();
+/* =========================================================
+   i18n: Uzbek (default), Russian, English
+   ========================================================= */
+const I18N = {
+  uz: {
+    nav_dash: 'Panel', nav_calc: 'Hisoblagich', nav_tools: 'Vositalar', nav_journal: 'Jurnal', nav_ex: 'Mashqlar', nav_tips: 'Maslahatlar',
+    login: 'Kirish', logout: 'Chiqish', hello: 'Salom',
+    hero_badge: 'Yoshingiz va vazningizga moslashgan reja', hero_h1: "Sog'lom tana uchun",
+    typed_1: 'kuchingizni oshiring', typed_2: 'vazningizni boshqaring', typed_3: 'har kuni harakat qiling',
+    hero_sub: "Kunlik kaloriya, ovqat jurnali, mashg'ulot, suv, vazn grafigi va animatsiyali ko'rsatmalar — hammasi bir joyda.",
+    hero_cta1: 'Hisoblashni boshlash', hero_cta2: "Mashqlarni ko'rish", stat_ex: 'Animatsiyali mashq', stat_lvl: 'Darajalar', stat_tools: 'Vosita',
+    sample: 'Jonli namuna', reps: 'Takror', watch_full: "To'liq ko'rsatmani ochish",
+    dash_title: 'Bugungi holat', dash_kcal: 'Kaloriya normasi', dash_eaten: "Iste'mol (kkal)", dash_water: 'Suv', dash_week: "Bu hafta mashg'ulot",
+    dash_streak: 'Ketma-ket kunlar', dash_weight: 'Vazn', dash_habits: 'Odatlar', dash_none: 'Avval hisoblang', dash_days: 'kun', dash_today: 'bugun',
+    glasses: 'stakan', coach_title: 'Adaptiv koch',
+    c_calc: "Avval kaloriyani hisoblang — shunga qarab shaxsiy tavsiya beraman.",
+    c_low: "Bugun kaloriya kam. Oqsilli ovqat qo'shing (tuxum, tovuq, tvorog).",
+    c_high: "Kaloriya normadan oshdi. Yengil kardio qo'shishni o'ylab ko'ring.",
+    c_water: "Suv kam. Har soatda bir stakan suv iching.",
+    c_train: "Bu hafta mashg'ulot kam — bugun 15 daqiqa qilib ko'ring.",
+    c_streak: 'Ajoyib! {n} kun ketma-ket faolsiz 🔥', c_good: "Hammasi joyida. Bugungi reja bajarildi 💪",
+    calc_title: "Kaloriya va mashg'ulot hisoblagichi",
+    calc_sub: "Ma'lumotlaringizni kiriting — kaloriya, makronutrientlar va haftalik reja darhol chiqadi.",
+    f_age: 'Yosh', f_sex: 'Jins', male: 'Erkak', female: 'Ayol', f_weight: 'Vazn (kg)', f_height: "Bo'y (sm)", f_act: 'Faollik darajasi',
+    act1: 'Kam harakat (ofis ishi)', act2: "Yengil (haftada 1–3 mashg'ulot)", act3: "O'rtacha (haftada 3–5 mashg'ulot)", act4: "Yuqori (haftada 6–7 mashg'ulot)",
+    f_goal: 'Maqsad', g_lose: 'Ozish', g_keep: 'Vaznni saqlash', g_gain: 'Mushak olish', calc_btn: 'Hisoblash',
+    calc_err: "Yosh 14–100, vazn 30–300 kg, bo'y 120–230 sm oralig'ida bo'lsin.",
+    res_kcal: 'Kunlik kaloriya ehtiyoji', kcal: 'kkal', res_goal: 'Maqsad', macro: 'Makro taqsimot',
+    protein: 'Oqsil', fat: "Yog'", carb: 'Uglevod', bmr: 'Bazal metabolizm', tdee: 'Umumiy sarf', water_need: 'Suv (kunlik)', ideal: 'Ideal vazn', bmi: 'BMI',
+    bmi_low: 'Vazn kam', bmi_norm: 'Normal', bmi_over: 'Ortiqcha vazn', bmi_obese: 'Semizlik',
+    train_title: "Mashg'ulot tavsiyasi", per_week: "Haftada {n} marta, har safar {m} daqiqa", week_plan: 'Haftalik reja',
+    cooldown: 'Sovutish: Cat-cow', min_s: 'daqiqa', save: '💾 Natijani saqlash', copy: '📋 Nusxa olish',
+    calc_note: "Hisob Mifflin–St Jeor formulasi asosida. Aniq reja uchun shifokor yoki trener bilan maslahatlashing.",
+    hist_title: 'Saqlangan natijalar', clear: 'Tozalash', hist_empty: 'Hozircha natija yo\'q. Hisoblagichdan keyin "Natijani saqlash" tugmasini bosing.',
+    hist_line: 'Haftada {n} marta · {m} daqiqa',
+    t_obese: "Yurish, velosiped, suzish — bo'g'imga yengil kardio", t_over: 'Kardio + asosiy kuch mashqlari',
+    t_under: "Asosan kuch mashqlari — kaloriyani kamaytirmang", t_normal: 'Kuch mashqlari + intervalli kardio',
+    t_50: "Har mashg'ulotdan oldin 10 daqiqa isinish va muvozanat mashqlari",
+    focus_s: 'Kuch', focus_c: 'Kardio', days: ['Dushanba', 'Chorshanba', 'Juma', 'Shanba'],
+    lvl0: "Boshlang'ich", lvl1: "O'rta", lvl2: 'Yuqori', sec_s: 'soniya',
+    tools_water: '💧 Suv nazorati', water_goal: 'Kunlik maqsad', water_hint: 'Stakanni bosib ham belgilashingiz mumkin.',
+    water_add: '+ 1 stakan', water_reset: 'Tozalash', water_done: 'Suv normasi bajarildi 🎉', water_cleared: 'Suv hisobi tozalandi',
+    tools_timer: '⏱ Taymer', sw: 'Sekundomer', start: 'Boshlash', pause: '⏸ Pauza', resume: '▶ Davom', reset: 'Qayta',
+    timer_hint: "Mashqlar orasida dam olish uchun 30–90 soniyali taymerdan foydalaning.", custom_ph: 'soniya', set_btn: "Qo'llash",
+    timer_done: '⏰ Dam olish tugadi!',
+    tools_habits: '✅ Kunlik odatlar', h_sleep: '7+ soat uyqu', h_water: 'Suv normasi', h_steps: '8 000+ qadam', h_warm: 'Isinish', h_train: "Mashg'ulot",
+    habit_ph: 'Yangi odat...', add: "Qo'shish", habit_stats: '{d}/{t} bajarildi',
+    tools_1rm: '🏋️ 1RM kalkulyator', rm_w: 'Og\'irlik (kg)', rm_r: 'Takror', rm_res: 'Taxminiy maksimum (1RM)',
+    rm_note: "Epley formulasi. Taxminiy natija — xavfsizlik uchun yengilroq og'irlik bilan sinang.",
+    food_title: 'Ovqatlanish jurnali', food_item: 'Taom', food_qty: 'Miqdor', food_empty: "Bugun hali ovqat qo'shilmagan.",
+    journal_title: "Mashg'ulot jurnali", j_ex: 'Mashq', j_sets: 'Set', j_reps: 'Takror', j_wt: "Og'irlik (kg, ixtiyoriy)", j_add: "+ Qo'shish",
+    j_week: "Bu hafta: {w} mashg'ulot, {d} kun", j_empty: 'Hali yozuv yo\'q', j_del: "O'chirish", j_logged: "Jurnalga qo'shildi ✅",
+    w_title: 'Vazn kuzatuvi', w_date: 'Sana', w_kg: 'Vazn (kg)', w_save: 'Saqlash', w_change: "O'zgarish", w_last: 'Oxirgi',
+    w_need2: "Grafik uchun kamida 2 ta o'lchov kerak", w_none: "Hali o'lchov yo'q", w_saved: 'Vazn saqlandi ✅',
+    ex_title: 'Mashqlar kutubxonasi', ex_sub: "Har bir mashq uchun animatsiyali ko'rsatma, qadamlar va takror hisoblagich.",
+    search_ph: 'Mashq qidirish...', f_all: 'Barchasi', f_kuch: 'Kuch', f_kardio: 'Kardio', f_coz: "Cho'zilish", f_fav: '❤️ Sevimlilar',
+    ex_none: 'Mos mashq topilmadi.', play_btn: "▶ Animatsiyali ko'rsatma",
+    random_title: "🎲 Tasodifiy mashg'ulot", random_hint: "5 ta tasodifiy mashq. Har birini bosib oching.", random_btn: '🎲 Yangilash',
+    p_steps: 'Qadamlar', p_pause: '⏸ Pauza', p_play: '▶ Davom', p_log: "📓 Jurnalga qo'shish", p_yt: "YouTube'da ham ko'rish →",
+    p_disc: "Animatsiya — mashqning schematik ko'rinishi. Og'riq yoki jarohat bo'lsa, mashqni to'xtating.",
+    p_hint: "Bo'sh joy: pauza · ← → almashtirish · Esc yopish", p_reps: 'Takror',
+    fav_add: "Sevimlilarga qo'shildi ❤️", fav_rm: 'Sevimlilardan olib tashlandi',
+    tips_title: 'Maslahatlar', tip_sleep_t: 'Uyqu', tip_sleep_b: "Kuniga 7–9 soat uyqu mushaklar tiklanishi uchun juda muhim.",
+    tip_water_t: 'Suv', tip_water_b: "Kun davomida suv iching, ayniqsa mashg'ulotdan oldin va keyin.",
+    tip_warm_t: 'Isinish', tip_warm_b: "Har mashg'ulotni 5–10 daqiqalik isinish bilan boshlang.",
+    tip_prot_t: 'Oqsil', tip_prot_b: "Mushaklar uchun tana vazni kilogrammiga kuniga 1,6–2 g oqsil yetarli.",
+    faq_title: "Ko'p so'raladigan savollar",
+    faq1_q: "Mashg'ulotdan keyin nima yeyish kerak?", faq1_a: "Oqsil va sekin uglevodlarni birga iste'mol qiling, masalan tuxum va non.",
+    faq2_q: 'Har kuni mashq qilsam bo\'ladimi?', faq2_a: "Mushaklar tiklanishi uchun kamida bir kun dam kerak, ayniqsa kuch mashqlaridan keyin.",
+    faq3_q: "Og'riq sezsam nima qilaman?", faq3_a: "Mashqni to'xtating. Og'riq davom etsa, shifokorga murojaat qiling.",
+    data_title: "Ma'lumotlar", data_sub: "Ma'lumotlaringiz faqat sizning brauzeringizda saqlanadi. Zaxira nusxa oling.",
+    exp_btn: '⬇️ Eksport (JSON)', imp_btn: '⬆️ Import', print_btn: '🖨️ Chop etish', wipe: "🗑️ Hammasini o'chirish",
+    wipe_sure: '⚠️ Tasdiqlash uchun yana bosing', wiped: "Barcha ma'lumot o'chirildi", exported: 'Eksport tayyor',
+    imported: 'Import qilindi ✅', import_err: "Fayl noto'g'ri",
+    auth_title: 'Kirish', email_l: 'Email', pass_l: 'Parol', login_btn: 'Kirish',
+    demo_note: "Demo rejim: ma'lumotlar faqat sizning brauzeringizda saqlanadi.",
+    auth_err: "Email to'g'ri bo'lsin va parol kamida 4 belgidan iborat bo'lsin.", welcome: 'Xush kelibsiz! 👋', logged_out: 'Tizimdan chiqdingiz',
+    toast_copy: 'Nusxa olindi 📋', toast_copy_fail: "Nusxa olib bo'lmadi", toast_saved: 'Natija saqlandi ✅',
+    footer_copy: "© 2026 FitLife — Sog'liq va sport",
+    footer_disc: "Bu ma'lumotlar umumiy tavsiya. Kasallik yoki jarohat bo'lsa, avval shifokor bilan maslahatlashing."
+  },
+  ru: {
+    nav_dash: 'Панель', nav_calc: 'Калькулятор', nav_tools: 'Инструменты', nav_journal: 'Дневник', nav_ex: 'Упражнения', nav_tips: 'Советы',
+    login: 'Войти', logout: 'Выйти', hello: 'Привет',
+    hero_badge: 'План под ваш возраст и вес', hero_h1: 'Для здорового тела',
+    typed_1: 'развивайте силу', typed_2: 'управляйте весом', typed_3: 'двигайтесь каждый день',
+    hero_sub: 'Калории, дневник питания и тренировок, контроль воды, график веса и анимированные инструкции — всё в одном месте.',
+    hero_cta1: 'Начать расчёт', hero_cta2: 'Смотреть упражнения', stat_ex: 'Анимированных упражнений', stat_lvl: 'Уровня', stat_tools: 'Инструментов',
+    sample: 'Живой пример', reps: 'Повторы', watch_full: 'Открыть подробную инструкцию',
+    dash_title: 'Сегодня', dash_kcal: 'Норма калорий', dash_eaten: 'Съедено (ккал)', dash_water: 'Вода', dash_week: 'Тренировок за неделю',
+    dash_streak: 'Серия дней', dash_weight: 'Вес', dash_habits: 'Привычки', dash_none: 'Сначала рассчитайте', dash_days: 'дн.', dash_today: 'сегодня',
+    glasses: 'стаканов', coach_title: 'Адаптивный тренер',
+    c_calc: 'Сначала рассчитайте калории — и я дам персональные советы.',
+    c_low: 'Калорий сегодня мало. Добавьте белковую еду (яйца, курица, творог).',
+    c_high: 'Калории выше нормы. Подумайте о лёгком кардио.',
+    c_water: 'Воды мало. Пейте стакан воды каждый час.',
+    c_train: 'На этой неделе мало тренировок — попробуйте 15 минут сегодня.',
+    c_streak: 'Отлично! {n} дней подряд 🔥', c_good: 'Всё по плану. Сегодняшние задачи выполнены 💪',
+    calc_title: 'Калькулятор калорий и тренировок',
+    calc_sub: 'Введите данные — калории, БЖУ и план на неделю появятся сразу.',
+    f_age: 'Возраст', f_sex: 'Пол', male: 'Мужской', female: 'Женский', f_weight: 'Вес (кг)', f_height: 'Рост (см)', f_act: 'Уровень активности',
+    act1: 'Сидячий образ жизни', act2: 'Лёгкая (1–3 тренировки в неделю)', act3: 'Средняя (3–5 тренировок в неделю)', act4: 'Высокая (6–7 тренировок в неделю)',
+    f_goal: 'Цель', g_lose: 'Похудение', g_keep: 'Поддержание веса', g_gain: 'Набор мышц', calc_btn: 'Рассчитать',
+    calc_err: 'Возраст 14–100, вес 30–300 кг, рост 120–230 см.',
+    res_kcal: 'Суточная потребность в калориях', kcal: 'ккал', res_goal: 'Цель', macro: 'БЖУ',
+    protein: 'Белки', fat: 'Жиры', carb: 'Углеводы', bmr: 'Базовый обмен', tdee: 'Общий расход', water_need: 'Вода (в день)', ideal: 'Идеальный вес', bmi: 'ИМТ',
+    bmi_low: 'Недостаток веса', bmi_norm: 'Норма', bmi_over: 'Избыток веса', bmi_obese: 'Ожирение',
+    train_title: 'Рекомендация по тренировкам', per_week: '{n} раза в неделю, по {m} мин', week_plan: 'План на неделю',
+    cooldown: 'Заминка: Кошка–корова', min_s: 'мин', save: '💾 Сохранить результат', copy: '📋 Копировать',
+    calc_note: 'Расчёт по формуле Миффлина–Сан Жеора. Для точного плана проконсультируйтесь с врачом или тренером.',
+    hist_title: 'Сохранённые результаты', clear: 'Очистить', hist_empty: 'Результатов пока нет. Рассчитайте и нажмите «Сохранить».',
+    hist_line: '{n} раза в неделю · {m} мин',
+    t_obese: 'Ходьба, велосипед, плавание — мягкое кардио', t_over: 'Кардио + базовые силовые упражнения',
+    t_under: 'В основном силовые — не снижайте калории', t_normal: 'Силовые + интервальное кардио',
+    t_50: '10 минут разминки и упражнения на баланс перед каждой тренировкой',
+    focus_s: 'Силовая', focus_c: 'Кардио', days: ['Понедельник', 'Среда', 'Пятница', 'Суббота'],
+    lvl0: 'Новичок', lvl1: 'Средний', lvl2: 'Продвинутый', sec_s: 'сек',
+    tools_water: '💧 Контроль воды', water_goal: 'Цель на день', water_hint: 'Можно также нажать на стакан.',
+    water_add: '+ 1 стакан', water_reset: 'Сброс', water_done: 'Норма воды выполнена 🎉', water_cleared: 'Счётчик воды сброшен',
+    tools_timer: '⏱ Таймер', sw: 'Секундомер', start: 'Старт', pause: '⏸ Пауза', resume: '▶ Продолжить', reset: 'Сброс',
+    timer_hint: 'Для отдыха между подходами используйте таймер 30–90 секунд.', custom_ph: 'секунд', set_btn: 'Задать',
+    timer_done: '⏰ Отдых окончен!',
+    tools_habits: '✅ Ежедневные привычки', h_sleep: '7+ часов сна', h_water: 'Норма воды', h_steps: '8 000+ шагов', h_warm: 'Разминка', h_train: 'Тренировка',
+    habit_ph: 'Новая привычка...', add: 'Добавить', habit_stats: '{d}/{t} выполнено',
+    tools_1rm: '🏋️ Калькулятор 1ПМ', rm_w: 'Вес (кг)', rm_r: 'Повторы', rm_res: 'Расчётный максимум (1ПМ)',
+    rm_note: 'Формула Эпли. Это оценка — проверяйте с меньшим весом.',
+    food_title: 'Дневник питания', food_item: 'Блюдо', food_qty: 'Порций', food_empty: 'Сегодня еда ещё не добавлена.',
+    journal_title: 'Дневник тренировок', j_ex: 'Упражнение', j_sets: 'Подходы', j_reps: 'Повторы', j_wt: 'Вес (кг, необязательно)', j_add: '+ Добавить',
+    j_week: 'На неделе: {w} тр., {d} дн.', j_empty: 'Записей пока нет', j_del: 'Удалить', j_logged: 'Добавлено в дневник ✅',
+    w_title: 'Отслеживание веса', w_date: 'Дата', w_kg: 'Вес (кг)', w_save: 'Сохранить', w_change: 'Изменение', w_last: 'Последний',
+    w_need2: 'Для графика нужно минимум 2 измерения', w_none: 'Измерений пока нет', w_saved: 'Вес сохранён ✅',
+    ex_title: 'Библиотека упражнений', ex_sub: 'Анимированная инструкция, шаги и счётчик повторов для каждого упражнения.',
+    search_ph: 'Поиск упражнения...', f_all: 'Все', f_kuch: 'Силовые', f_kardio: 'Кардио', f_coz: 'Растяжка', f_fav: '❤️ Избранное',
+    ex_none: 'Упражнений не найдено.', play_btn: '▶ Анимированная инструкция',
+    random_title: '🎲 Случайная тренировка', random_hint: '5 случайных упражнений. Нажмите, чтобы открыть.', random_btn: '🎲 Обновить',
+    p_steps: 'Шаги', p_pause: '⏸ Пауза', p_play: '▶ Продолжить', p_log: '📓 В дневник', p_yt: 'Смотреть на YouTube →',
+    p_disc: 'Анимация — схематичный показ. При боли или травме прекратите упражнение.',
+    p_hint: 'Пробел: пауза · ← → переключение · Esc: закрыть', p_reps: 'Повторы',
+    fav_add: 'Добавлено в избранное ❤️', fav_rm: 'Удалено из избранного',
+    tips_title: 'Советы', tip_sleep_t: 'Сон', tip_sleep_b: '7–9 часов сна в сутки критически важны для восстановления мышц.',
+    tip_water_t: 'Вода', tip_water_b: 'Пейте воду в течение дня, особенно до и после тренировки.',
+    tip_warm_t: 'Разминка', tip_warm_b: 'Начинайте каждую тренировку с 5–10 минут разминки.',
+    tip_prot_t: 'Белок', tip_prot_b: 'Для мышц достаточно 1,6–2 г белка на кг массы тела в день.',
+    faq_title: 'Частые вопросы',
+    faq1_q: 'Что есть после тренировки?', faq1_a: 'Совместите белок и медленные углеводы, например яйца с хлебом.',
+    faq2_q: 'Можно тренироваться каждый день?', faq2_a: 'Мышцам нужен день отдыха, особенно после силовых нагрузок.',
+    faq3_q: 'Что делать при боли?', faq3_a: 'Прекратите упражнение. Если боль не проходит — обратитесь к врачу.',
+    data_title: 'Данные', data_sub: 'Данные хранятся только в вашем браузере. Сохраняйте резервную копию.',
+    exp_btn: '⬇️ Экспорт (JSON)', imp_btn: '⬆️ Импорт', print_btn: '🖨️ Печать', wipe: '🗑️ Стереть всё',
+    wipe_sure: '⚠️ Нажмите ещё раз для подтверждения', wiped: 'Все данные удалены', exported: 'Экспорт готов',
+    imported: 'Импорт выполнен ✅', import_err: 'Неверный файл',
+    auth_title: 'Вход', email_l: 'Email', pass_l: 'Пароль', login_btn: 'Войти',
+    demo_note: 'Демо-режим: данные хранятся только в браузере.',
+    auth_err: 'Введите корректный email и пароль минимум из 4 символов.', welcome: 'Добро пожаловать! 👋', logged_out: 'Вы вышли',
+    toast_copy: 'Скопировано 📋', toast_copy_fail: 'Не удалось скопировать', toast_saved: 'Результат сохранён ✅',
+    footer_copy: '© 2026 FitLife — Здоровье и спорт',
+    footer_disc: 'Это общие рекомендации. При болезни или травме сначала проконсультируйтесь с врачом.'
+  },
+  en: {
+    nav_dash: 'Dashboard', nav_calc: 'Calculator', nav_tools: 'Tools', nav_journal: 'Journal', nav_ex: 'Exercises', nav_tips: 'Tips',
+    login: 'Log in', logout: 'Log out', hello: 'Hi',
+    hero_badge: 'A plan adapted to your age and weight', hero_h1: 'For a healthy body',
+    typed_1: 'build your strength', typed_2: 'manage your weight', typed_3: 'move every day',
+    hero_sub: 'Calories, food and workout journal, water tracking, weight chart and animated guides — all in one place.',
+    hero_cta1: 'Start calculating', hero_cta2: 'Browse exercises', stat_ex: 'Animated exercises', stat_lvl: 'Levels', stat_tools: 'Tools',
+    sample: 'Live preview', reps: 'Reps', watch_full: 'Open full guide',
+    dash_title: 'Today', dash_kcal: 'Calorie target', dash_eaten: 'Eaten (kcal)', dash_water: 'Water', dash_week: 'Workouts this week',
+    dash_streak: 'Day streak', dash_weight: 'Weight', dash_habits: 'Habits', dash_none: 'Calculate first', dash_days: 'days', dash_today: 'today',
+    glasses: 'glasses', coach_title: 'Adaptive coach',
+    c_calc: 'Calculate your calories first — then I\'ll give you personal advice.',
+    c_low: 'Calories are low today. Add a protein-rich meal (eggs, chicken, cottage cheese).',
+    c_high: 'Calories are above target. Consider adding some light cardio.',
+    c_water: 'Low on water. Drink a glass every hour.',
+    c_train: 'Few workouts this week — try 15 minutes today.',
+    c_streak: 'Great! {n} days in a row 🔥', c_good: 'All on track. Today\'s plan is done 💪',
+    calc_title: 'Calorie & training calculator', calc_sub: 'Enter your data — calories, macros and a weekly plan appear instantly.',
+    f_age: 'Age', f_sex: 'Sex', male: 'Male', female: 'Female', f_weight: 'Weight (kg)', f_height: 'Height (cm)', f_act: 'Activity level',
+    act1: 'Sedentary (desk job)', act2: 'Light (1–3 workouts/week)', act3: 'Moderate (3–5 workouts/week)', act4: 'High (6–7 workouts/week)',
+    f_goal: 'Goal', g_lose: 'Lose weight', g_keep: 'Maintain', g_gain: 'Build muscle', calc_btn: 'Calculate',
+    calc_err: 'Age 14–100, weight 30–300 kg, height 120–230 cm.',
+    res_kcal: 'Daily calorie need', kcal: 'kcal', res_goal: 'Goal', macro: 'Macros',
+    protein: 'Protein', fat: 'Fat', carb: 'Carbs', bmr: 'Basal metabolism', tdee: 'Total burn', water_need: 'Water (daily)', ideal: 'Ideal weight', bmi: 'BMI',
+    bmi_low: 'Underweight', bmi_norm: 'Normal', bmi_over: 'Overweight', bmi_obese: 'Obesity',
+    train_title: 'Training advice', per_week: '{n}× per week, {m} min each', week_plan: 'Weekly plan',
+    cooldown: 'Cool-down: Cat-cow', min_s: 'min', save: '💾 Save result', copy: '📋 Copy',
+    calc_note: 'Based on the Mifflin–St Jeor formula. For an exact plan, consult a doctor or trainer.',
+    hist_title: 'Saved results', clear: 'Clear', hist_empty: 'No saved results yet. Calculate, then press "Save result".',
+    hist_line: '{n}× per week · {m} min',
+    t_obese: 'Walking, cycling, swimming — gentle cardio', t_over: 'Cardio + core strength work',
+    t_under: 'Mostly strength work — don\'t cut calories', t_normal: 'Strength + interval cardio',
+    t_50: '10-min warm-up and balance drills before each session',
+    focus_s: 'Strength', focus_c: 'Cardio', days: ['Monday', 'Wednesday', 'Friday', 'Saturday'],
+    lvl0: 'Beginner', lvl1: 'Intermediate', lvl2: 'Advanced', sec_s: 'sec',
+    tools_water: '💧 Water tracker', water_goal: 'Daily goal', water_hint: 'You can also tap a glass.',
+    water_add: '+ 1 glass', water_reset: 'Reset', water_done: 'Water goal reached 🎉', water_cleared: 'Water counter reset',
+    tools_timer: '⏱ Timer', sw: 'Stopwatch', start: 'Start', pause: '⏸ Pause', resume: '▶ Resume', reset: 'Reset',
+    timer_hint: 'Use a 30–90 s timer to rest between sets.', custom_ph: 'seconds', set_btn: 'Set', timer_done: '⏰ Rest is over!',
+    tools_habits: '✅ Daily habits', h_sleep: '7+ hours of sleep', h_water: 'Water goal', h_steps: '8,000+ steps', h_warm: 'Warm-up', h_train: 'Workout',
+    habit_ph: 'New habit...', add: 'Add', habit_stats: '{d}/{t} done',
+    tools_1rm: '🏋️ 1RM calculator', rm_w: 'Weight (kg)', rm_r: 'Reps', rm_res: 'Estimated max (1RM)',
+    rm_note: 'Epley formula. An estimate — test safely with lighter weights.',
+    food_title: 'Food journal', food_item: 'Dish', food_qty: 'Servings', food_empty: 'No food logged today yet.',
+    journal_title: 'Workout journal', j_ex: 'Exercise', j_sets: 'Sets', j_reps: 'Reps', j_wt: 'Weight (kg, optional)', j_add: '+ Add',
+    j_week: 'This week: {w} workouts, {d} days', j_empty: 'No entries yet', j_del: 'Delete', j_logged: 'Added to journal ✅',
+    w_title: 'Weight tracking', w_date: 'Date', w_kg: 'Weight (kg)', w_save: 'Save', w_change: 'Change', w_last: 'Latest',
+    w_need2: 'Need at least 2 measurements for the chart', w_none: 'No measurements yet', w_saved: 'Weight saved ✅',
+    ex_title: 'Exercise library', ex_sub: 'Animated guide, steps and a rep counter for every exercise.',
+    search_ph: 'Search exercises...', f_all: 'All', f_kuch: 'Strength', f_kardio: 'Cardio', f_coz: 'Stretch', f_fav: '❤️ Favorites',
+    ex_none: 'No exercises found.', play_btn: '▶ Animated guide',
+    random_title: '🎲 Random workout', random_hint: '5 random exercises. Tap any to open it.', random_btn: '🎲 Shuffle',
+    p_steps: 'Steps', p_pause: '⏸ Pause', p_play: '▶ Play', p_log: '📓 Log it', p_yt: 'Watch on YouTube →',
+    p_disc: 'Animation is a schematic demo. Stop if you feel pain or injury.',
+    p_hint: 'Space: pause · ← → switch · Esc: close', p_reps: 'Reps',
+    fav_add: 'Added to favorites ❤️', fav_rm: 'Removed from favorites',
+    tips_title: 'Tips', tip_sleep_t: 'Sleep', tip_sleep_b: '7–9 hours of sleep a day is essential for muscle recovery.',
+    tip_water_t: 'Water', tip_water_b: 'Drink water throughout the day, especially before and after training.',
+    tip_warm_t: 'Warm-up', tip_warm_b: 'Start every session with a 5–10 minute warm-up.',
+    tip_prot_t: 'Protein', tip_prot_b: 'For muscle, 1.6–2 g of protein per kg of body weight per day is enough.',
+    faq_title: 'FAQ',
+    faq1_q: 'What should I eat after training?', faq1_a: 'Combine protein with complex carbs, e.g. eggs with bread.',
+    faq2_q: 'Can I train every day?', faq2_a: 'Muscles need at least one rest day, especially after strength work.',
+    faq3_q: 'What if I feel pain?', faq3_a: 'Stop the exercise. If pain persists, see a doctor.',
+    data_title: 'Your data', data_sub: 'Your data stays in your browser only. Keep a backup.',
+    exp_btn: '⬇️ Export (JSON)', imp_btn: '⬆️ Import', print_btn: '🖨️ Print', wipe: '🗑️ Erase all',
+    wipe_sure: '⚠️ Click again to confirm', wiped: 'All data erased', exported: 'Export ready',
+    imported: 'Imported ✅', import_err: 'Invalid file',
+    auth_title: 'Log in', email_l: 'Email', pass_l: 'Password', login_btn: 'Log in',
+    demo_note: 'Demo mode: data is stored only in your browser.',
+    auth_err: 'Enter a valid email and a password of at least 4 characters.', welcome: 'Welcome! 👋', logged_out: 'Logged out',
+    toast_copy: 'Copied 📋', toast_copy_fail: 'Copy failed', toast_saved: 'Result saved ✅',
+    footer_copy: '© 2026 FitLife — Health & Sport',
+    footer_disc: 'General advice only. If you have an illness or injury, consult a doctor first.'
+  }
+};
 
-/* Navbar */
-$('#burger').onclick=()=>$('#mob').classList.toggle('hidden');
-$$('#mob a').forEach(a=>a.onclick=()=>$('#mob').classList.add('hidden'));
-addEventListener('scroll',()=>{
- $('#hd').classList.toggle('glass',scrollY>20);$('#hd').classList.toggle('border-b',scrollY>20);$('#hd').classList.toggle('border-white/10',scrollY>20);
- $('#up').classList.toggle('hidden',scrollY<600)});
-$('#up').onclick=()=>scrollTo({top:0});
+const navL = (navigator.language || 'uz').slice(0, 2);
+let lang = store.get('lang') || (I18N[navL] ? navL : 'uz');
+if (!I18N[lang]) lang = 'uz';
+const t = (k) => I18N[lang][k] ?? I18N.uz[k] ?? k;
+function fmt(k, o) { return t(k).replace(/\{(\w+)\}/g, (_, n) => o[n]); }
 
-/* Modal */
-function openM(h){$('#mc').innerHTML=h;$('#md').classList.remove('hidden');document.body.style.overflow='hidden'}
-function closeM(){$('#md').classList.add('hidden');document.body.style.overflow='';clearInterval(tm)}
-$('#mx').onclick=closeM;$('#md').onclick=e=>{if(e.target.id=='md')closeM()};
-addEventListener('keydown',e=>{if(e.key=='Escape')closeM()});
+function applyI18n() {
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach((el) => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-ph]').forEach((el) => { el.placeholder = t(el.dataset.i18nPh); });
+}
 
-/* Sports */
-const SP=[
-{e:'🏃',n:'Yugurish',c:'Kardio',m:30,k:300,d:'Chidamlilikni oshirish va faol bo‘lish uchun ajoyib tanlov.',x:['5 daqiqa yurib qizish','20 daqiqa yengil yugurish','5 daqiqa sekin yurish','Cho‘zilish mashqlari']},
-{e:'🏋️',n:'Fitness',c:'Kuch',m:45,k:350,d:'Kuch va umumiy jismoniy tayyorgarlikni rivojlantiring.',x:['Squat — 3×12','Otjimaniya — 3×10','Plank — 3×40 soniya','Lunge — 3×10']},
-{e:'🚴',n:'Velosiped',c:'Kardio',m:40,k:320,d:'Ochiq havoda harakat qilish va faol vaqt o‘tkazish.',x:['5 daqiqa sekin haydash','30 daqiqa o‘rtacha tezlik','5 daqiqa tinchlanish']},
-{e:'🧘',n:'Yoga',c:'Yengil',m:30,k:120,d:'Egiluvchanlik va xotirjamlik uchun mashqlar.',x:['Chuqur nafas — 3 daqiqa','Mushuk-sigir holati','Itning pastga qarashi','Bolalar holati']},
-{e:'🏊',n:'Suzish',c:'Kardio',m:40,k:400,d:'Butun tanani yuklaydigan, bo‘g‘imlarga yengil mashq.',x:['Qizish — 200 m','Erkin usul — 4×100 m','Orqada suzish — 2×100 m','Sovutish — 100 m']},
-{e:'🚶',n:'Tez yurish',c:'Yengil',m:30,k:150,d:'Har kimga mos, oddiy va samarali mashq.',x:['Qulay poyabzal kiying','25 daqiqa tez yuring','Qadamlar: ~3000','Suv ichishni unutmang']}];
-let cat='Hammasi';
-function renderF(){const cs=['Hammasi',...new Set(SP.map(s=>s.c))];
- $('#filters').innerHTML=cs.map(c=>`<button data-f="${c}" class="px-5 py-2 rounded-full text-sm font-medium transition ${c==cat?'bg-green-400 text-slate-950':'bg-white/5 text-gray-300 hover:bg-white/10'}">${c}</button>`).join('');
- $$('[data-f]').forEach(b=>b.onclick=()=>{cat=b.dataset.f;renderF();renderG()})}
-function renderG(){$('#grid').innerHTML=SP.map((s,i)=>({s,i})).filter(o=>cat=='Hammasi'||o.s.c==cat).map(({s,i})=>`
- <div class="pop group bg-slate-900 border border-white/10 rounded-2xl p-7 hover:border-green-400/50 hover:-translate-y-1 transition cursor-pointer" onclick="openSport(${i})">
-  <div class="flex justify-between items-start"><div class="text-4xl">${s.e}</div><span class="text-xs px-3 py-1 rounded-full bg-green-400/10 text-green-400">${s.c}</span></div>
-  <h3 class="text-xl font-bold mt-5">${s.n}</h3><p class="text-gray-400 mt-3">${s.d}</p>
-  <div class="flex justify-between items-center mt-5 text-sm text-gray-500"><span>⏱ ${s.m} daq · 🔥 ${s.k} kkal</span><span class="text-green-400 group-hover:translate-x-1 transition">Ochish →</span></div></div>`).join('')}
-renderF();renderG();
+/* =========================================================
+   Constants: levels, goals, chips, poses, exercises, foods
+   ========================================================= */
+const LEVEL_CLS = [
+  'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300',
+  'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
+  'bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300'
+];
+const GOALS = { lose: { adj: -400, k: 'g_lose' }, keep: { adj: 0, k: 'g_keep' }, gain: { adj: 300, k: 'g_gain' } };
+const CHIP_OFF = 'border-slate-300 bg-white text-slate-700 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-300';
+const CHIP_ON = 'border-brand-500 bg-brand-500 text-white';
+const STEP_OFF = 'opacity-[.45]';
+const STEP_ON = 'opacity-100 translate-x-1 font-semibold text-brand-700 dark:text-brand-400';
+const setChip = (el, on) => {
+  el.classList.remove(...(on ? CHIP_OFF : CHIP_ON).split(' '));
+  el.classList.add(...(on ? CHIP_ON : CHIP_OFF).split(' '));
+};
+const setStep = (el, on) => {
+  el.classList.remove(...(on ? STEP_OFF : STEP_ON).split(' '));
+  el.classList.add(...(on ? STEP_ON : STEP_OFF).split(' '));
+};
 
-let tm,left=0,run=false;
-const fmt=s=>String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
-function openSport(i){const s=SP[i];left=s.m*60;run=false;
- openM(`<div class="text-5xl">${s.e}</div><h3 class="text-2xl font-bold mt-3">${s.n}</h3><p class="text-gray-400 mt-2">${s.d}</p>
- <ul class="mt-5 space-y-2">${s.x.map(x=>`<li><label class="flex items-center gap-3 bg-slate-950 rounded-xl px-4 py-3 cursor-pointer"><input type="checkbox" class="ck accent-green-400 w-4 h-4"><span>${x}</span></label></li>`).join('')}</ul>
- <p id="pr" class="text-sm text-gray-400 mt-3">0 / ${s.x.length} bajarildi</p>
- <div class="text-center mt-5"><div id="tv" class="text-5xl font-bold tabular-nums">${fmt(left)}</div>
- <div class="flex gap-3 mt-4"><button id="tg" class="flex-1 bg-green-400 text-slate-950 font-semibold py-3 rounded-xl hover:bg-green-300">▶ Boshlash</button>
- <button id="tr" class="px-5 border border-white/20 rounded-xl hover:bg-white/10">↺</button></div></div>`);
- $$('.ck').forEach(c=>c.onchange=()=>{const n=$$('.ck:checked').length;$('#pr').textContent=n+' / '+s.x.length+' bajarildi';if(n==s.x.length)toast('✅ Barcha mashqlar bajarildi!')});
- $('#tg').onclick=()=>{run=!run;$('#tg').textContent=run?'⏸ To‘xtatish':'▶ Davom etish';clearInterval(tm);
-  if(run)tm=setInterval(()=>{left--;$('#tv').textContent=fmt(left);if(left<=0){clearInterval(tm);S.step+=s.k*10;draw();closeM();toast('🔥 '+s.k+' kkal yoqdingiz! Qadamlar qo‘shildi')}},1000)};
- $('#tr').onclick=()=>{clearInterval(tm);run=false;left=s.m*60;$('#tv').textContent=fmt(left);$('#tg').textContent='▶ Boshlash'}}
+/* 9 joint points: [head, shoulder, hip, elbow, hand, knee, foot, knee2, foot2] */
+const STAND      = [[150,40],[150,75],[150,165],[168,118],[175,160],[158,215],[152,268],[142,215],[138,268]];
+const SQUAT      = [[146,80],[136,115],[122,200],[165,150],[190,140],[170,220],[152,268],[160,222],[146,268]];
+const PUSH_UP    = [[222,160],[195,180],[110,205],[195,225],[192,268],[65,232],[28,268],[70,236],[34,268]];
+const PUSH_DOWN  = [[228,222],[195,240],[110,215],[165,252],[192,268],[65,236],[28,268],[70,240],[34,268]];
+const LUNGE_UP   = [[150,40],[150,75],[150,165],[162,118],[168,160],[160,215],[175,268],[140,215],[125,268]];
+const LUNGE_DOWN = [[150,75],[150,110],[150,200],[162,150],[168,188],[190,222],[178,268],[125,242],[88,268]];
+const BRIDGE_DN  = [[55,248],[85,255],[160,255],[110,262],[135,266],[200,220],[225,268],[205,224],[230,268]];
+const BRIDGE_UP  = [[55,248],[85,255],[160,190],[110,262],[135,266],[200,220],[225,268],[205,224],[230,268]];
+const PLANK      = [[62,172],[100,190],[185,210],[100,262],[130,266],[230,238],[265,268],[232,240],[270,268]];
+const PLANK_B    = [[62,170],[100,188],[185,206],[100,262],[130,266],[230,238],[265,268],[232,240],[270,268]];
+const JACK_IN    = [[150,40],[150,75],[150,165],[168,118],[175,160],[152,215],[150,268],[148,215],[148,268]];
+const JACK_OUT   = [[150,40],[150,75],[150,165],[178,35],[172,8],[125,215],[100,268],[175,215],[200,268]];
+const BURPEE_UP  = [[150,40],[150,75],[150,165],[178,35],[172,8],[158,215],[152,268],[142,215],[138,268]];
+const MOUNT_A    = [[62,172],[100,190],[185,210],[100,262],[130,266],[150,232],[120,262],[232,238],[268,268]];
+const MOUNT_B    = [[62,172],[100,190],[185,210],[100,262],[130,266],[232,238],[268,268],[150,232],[120,262]];
+const COW        = [[58,152],[90,178],[190,178],[95,222],[90,268],[190,222],[205,268],[196,226],[212,268]];
+const CAT        = [[70,208],[92,192],[188,168],[95,224],[90,268],[190,222],[205,268],[196,226],[212,268]];
+const CRUNCH_A   = [[52,246],[92,258],[150,262],[78,232],[60,236],[190,214],[236,262],[196,222],[240,262]];
+const CRUNCH_B   = [[72,222],[104,242],[150,262],[88,216],[74,208],[190,214],[236,262],[196,222],[240,262]];
+const SUP_DN     = [[60,248],[84,258],[160,258],[40,262],[10,262],[210,262],[262,262],[208,256],[256,256]];
+const SUP_UP     = [[60,228],[84,240],[160,240],[40,236],[12,232],[210,242],[262,222],[208,236],[256,220]];
 
-/* BMI */
-$('#bcalc').onclick=()=>{const h=+$('#bh').value/100,w=+$('#bw').value;
- if(!h||!w||h<1||w<20){toast('Bo‘y va vazningizni to‘g‘ri kiriting');return}
- const b=w/(h*h);let t,c,d;
- if(b<18.5){t='Kam vazn';c='#60a5fa';d='Ovqatlanishni to‘yimliroq qiling va mutaxassis bilan maslahatlashing.'}
- else if(b<25){t='Normal';c='#4ade80';d='Ajoyib! Hozirgi odatlaringizni davom ettiring.'}
- else if(b<30){t='Ortiqcha vazn';c='#facc15';d='Harakatni oshiring va ratsionni muvozanatlang.'}
- else{t='Semizlik';c='#f87171';d='Shifokor yoki dietolog bilan maslahatlashish tavsiya etiladi.'}
- $('#bres').classList.remove('hidden');$('#bv').textContent=b.toFixed(1);$('#bt').textContent=t;$('#bt').style.color=c;$('#bd').textContent=d;
- $('#bm').style.left=Math.min(98,Math.max(0,(b-12)/(40-12)*100))+'%'};
-['bh','bw'].forEach(i=>$('#'+i).addEventListener('keydown',e=>{if(e.key=='Enter')$('#bcalc').click()}));
+const EX = [
+  { id: 'squat', cat: 'kuch', lvl: 0, dose: [3, 12], q: 'bodyweight squat proper form', anim: [STAND, SQUAT],
+    name: { uz: 'Bodyweight squat', ru: 'Приседания', en: 'Bodyweight squat' },
+    muscle: { uz: 'Oyoq, dumba', ru: 'Ноги, ягодицы', en: 'Legs, glutes' },
+    steps: {
+      uz: ['Oyoqlar yelka kengligida, oyoq uchlari biroz tashqariga', "Tizzalarni bukib, dumbani pastga tushiring, orqa tekis", "Kuch bilan turing, tizzalar oyoq uchi yo'nalishida"],
+      ru: ['Ноги на ширине плеч, носки чуть врозь', 'Согните колени и отведите таз назад, спина прямая', 'Встаньте, толкаясь пятками, колени идут по направлению носков'],
+      en: ['Feet shoulder-width apart, toes slightly out', 'Bend your knees and push hips back, back straight', 'Stand up by driving through your heels, knees track over toes']
+    } },
+  { id: 'pushup', cat: 'kuch', lvl: 0, dose: [3, 10], q: 'push up proper form', anim: [PUSH_UP, PUSH_DOWN],
+    name: { uz: 'Otjim (Push-up)', ru: 'Отжимания', en: 'Push-up' },
+    muscle: { uz: "Ko'krak, uch boshli mushak", ru: 'Грудь, трицепс', en: 'Chest, triceps' },
+    steps: {
+      uz: ["Qo'llar yelka kengligida, tana to'g'ri chiziqda", 'Ko\'krakni yerga yaqinlashtiring, tirsaklar tanaga yaqin', "Qo'llarni to'liq yozib, qaytib keling"],
+      ru: ['Руки на ширине плеч, тело — прямой линией', 'Опускайтесь, пока грудь почти не коснётся пола, локти близко к телу', 'Выпрямите руки и вернитесь в исходное положение'],
+      en: ['Hands shoulder-width, body in a straight line', 'Lower your chest close to the floor, elbows near your body', 'Push back up to full arm extension']
+    } },
+  { id: 'lunge', cat: 'kuch', lvl: 1, dose: [3, 10], q: 'lunge proper form tutorial', anim: [LUNGE_UP, LUNGE_DOWN],
+    name: { uz: 'Lunj (Lunge)', ru: 'Выпады', en: 'Lunge' },
+    muscle: { uz: 'Oyoq, dumba', ru: 'Ноги, ягодицы', en: 'Legs, glutes' },
+    steps: {
+      uz: ['Bir oyoq bilan katta qadam tashlang', "Orqa tizza pastga tushsin, old tizza oyoq uchidan oshmasin", 'Oyoqlarni almashtirib, takrorlang (har oyoqqa)'],
+      ru: ['Сделайте большой шаг одной ногой', 'Опустите заднее колено к полу, переднее не выходит за носок', 'Смените ногу и повторите'],
+      en: ['Take a big step forward with one leg', 'Lower the back knee toward the floor, front knee stays over the ankle', 'Switch legs and repeat (per leg)']
+    } },
+  { id: 'bridge', cat: 'kuch', lvl: 0, dose: [3, 15], q: 'glute bridge tutorial', anim: [BRIDGE_DN, BRIDGE_UP],
+    name: { uz: "Dumba ko'prigi (Glute bridge)", ru: 'Ягодичный мостик', en: 'Glute bridge' },
+    muscle: { uz: 'Dumba, orqa', ru: 'Ягодицы, поясница', en: 'Glutes, lower back' },
+    steps: {
+      uz: ['Orqangizda yoting, tizzalar bukilgan', "Dumbani ko'taring, tana tizzadan yelkagacha chiziq bo'lsin", 'Bir soniya ushlab, sekin tushiring'],
+      ru: ['Лягте на спину, колени согнуты', 'Поднимите таз — тело от колен до плеч прямое', 'Задержитесь на секунду и медленно опуститесь'],
+      en: ['Lie on your back with knees bent', 'Lift your hips so your body forms a line from knees to shoulders', 'Hold for a second, then lower slowly']
+    } },
+  { id: 'plank', cat: 'kuch', lvl: 0, dose: [3, 30], timed: true, q: 'plank proper form', anim: [PLANK, PLANK_B],
+    name: { uz: 'Plank', ru: 'Планка', en: 'Plank' },
+    muscle: { uz: 'Qorin, bel', ru: 'Пресс, кор', en: 'Core' },
+    steps: {
+      uz: ['Tirsak va oyoq uchlariga tayaning', "Bosh, yelka va dumba bitta chiziqda bo'lsin", 'Qornni tortib, nafasni tekis oling'],
+      ru: ['Упритесь предплечьями и носками в пол', 'Голова, плечи и таз — на одной прямой', 'Напрягите пресс и дышите ровно'],
+      en: ['Rest on forearms and toes', 'Keep head, shoulders and hips in one line', 'Brace your core and breathe steadily']
+    } },
+  { id: 'crunch', cat: 'kuch', lvl: 0, dose: [3, 15], q: 'crunch proper form', anim: [CRUNCH_A, CRUNCH_B],
+    name: { uz: 'Qorin mashqi (Crunch)', ru: 'Скручивания', en: 'Crunches' },
+    muscle: { uz: 'Qorin', ru: 'Пресс', en: 'Abs' },
+    steps: {
+      uz: ["Orqangizda yoting, tizzalar bukilgan, qo'llar boshda", 'Yelkalarni poldan ko\'taring, qorinni qisib', 'Sekin pastga tushing, nazoratni yo\'qotmang'],
+      ru: ['Лягте на спину, колени согнуты, руки за головой', 'Поднимите плечи над полом, напрягая пресс', 'Медленно опуститесь, не теряя контроль'],
+      en: ['Lie on your back, knees bent, hands behind your head', 'Lift your shoulders off the floor by contracting your abs', 'Lower slowly without losing control']
+    } },
+  { id: 'superman', cat: 'kuch', lvl: 0, dose: [3, 12], q: 'superman exercise tutorial', anim: [SUP_DN, SUP_UP],
+    name: { uz: 'Superman', ru: 'Супермен', en: 'Superman' },
+    muscle: { uz: 'Orqa, dumba', ru: 'Спина, ягодицы', en: 'Back, glutes' },
+    steps: {
+      uz: ["Qorningda yoting, qo'llar oldinga cho'zilgan", "Qo'llar va oyoqlarni bir vaqtda biroz ko'taring", 'Ushlab turing, keyin sekin tushing'],
+      ru: ['Лягте на живот, руки вытянуты вперёд', 'Одновременно поднимите руки и ноги', 'Задержитесь, затем медленно опуститесь'],
+      en: ['Lie face down with arms stretched forward', 'Lift arms and legs off the floor together', 'Hold briefly, then lower slowly']
+    } },
+  { id: 'jacks', cat: 'kardio', lvl: 0, dose: [3, 45], timed: true, q: 'jumping jacks proper form', anim: [JACK_IN, JACK_OUT],
+    name: { uz: 'Jumping jacks', ru: 'Прыжки «звёздочка»', en: 'Jumping jacks' },
+    muscle: { uz: 'Butun tana', ru: 'Всё тело', en: 'Full body' },
+    steps: {
+      uz: ["Oyoqlar birga, qo'llar tanada", "Oyoqlarni kengaytirib, qo'llarni yuqoriga ko'taring", "Boshlang'ich holatga qaytib, takrorlang"],
+      ru: ['Ноги вместе, руки вдоль тела', 'Разведите ноги и поднимите руки над головой', 'Вернитесь в исходное положение и повторяйте'],
+      en: ['Feet together, arms at your sides', 'Jump feet wide while raising arms overhead', 'Jump back to start and repeat']
+    } },
+  { id: 'mountain', cat: 'kardio', lvl: 1, dose: [3, 30], timed: true, q: 'mountain climbers proper form', anim: [MOUNT_A, MOUNT_B],
+    name: { uz: 'Mountain climbers', ru: 'Горный альпинист', en: 'Mountain climbers' },
+    muscle: { uz: 'Qorin, kardio', ru: 'Пресс, кардио', en: 'Core, cardio' },
+    steps: {
+      uz: ["Planka holatida qo'llarda turing", "Oldingi tizzani ko'krakka tortib, oyoqni almashtiring", 'Tez, lekin tekis nafas bilan davom eting'],
+      ru: ['Встаньте в упор на прямых руках', 'Подтягивайте колено к груди и меняйте ногу', 'Быстро, но ровно дышите'],
+      en: ['Start in a high plank on straight arms', 'Drive one knee to your chest, then switch legs', 'Go fast but keep your breathing steady']
+    } },
+  { id: 'burpee', cat: 'kardio', lvl: 2, dose: [3, 8], q: 'burpee proper form', anim: [PLANK, BURPEE_UP],
+    name: { uz: 'Burpee', ru: 'Бёрпи', en: 'Burpee' },
+    muscle: { uz: 'Butun tana, yurak', ru: 'Всё тело, сердце', en: 'Full body, heart' },
+    steps: {
+      uz: ["Qo'llar yerda, planka holatida turing", "Oyoqlarni yig'ing va tik turing", "Qo'llarni yuqoriga ko'tarib sakrang"],
+      ru: ['Встаньте в упор на руках', 'Подтяните ноги и встаньте', 'Выпрыгните вверх, подняв руки'],
+      en: ['Get into a plank with hands on the floor', 'Jump feet in and stand up', 'Jump up with arms raised overhead']
+    } },
+  { id: 'catcow', cat: 'cozilish', lvl: 0, dose: [1, 120], timed: true, q: 'cat cow stretch tutorial', anim: [COW, CAT],
+    name: { uz: 'Cat-cow (Mushuk-sigir)', ru: 'Кошка–корова', en: 'Cat-cow' },
+    muscle: { uz: 'Orqa, bel', ru: 'Спина, поясница', en: 'Back, lower back' },
+    steps: {
+      uz: ["To'rt oyoqlab turing, qo'llar yelka ostida", "Nafas olib belni botiring va boshni ko'taring", 'Nafas chiqarib orqani yumaloq qiling'],
+      ru: ['Встаньте на четвереньки, руки под плечами', 'На вдохе прогните спину и поднимите голову', 'На выдохе округлите спину'],
+      en: ['Get on all fours, hands under shoulders', 'Inhale: arch your back and lift your head', 'Exhale: round your spine']
+    } }
+];
 
-/* Accordion */
-const TP=[['01 — HARAKAT','Ko‘proq harakat qiling','Uzoq vaqt bir joyda o‘tirib qolmang. Har soatda 5 daqiqa turib yuring, zinadan foydalaning, qisqa yurishlarni odat qiling.'],
-['02 — OVQAT','Muvozanatli ovqatlaning','Sabzavot, meva, oqsil va to‘liq donli mahsulotlarni ratsioningizga qo‘shing. Shirinlik va qovurilgan ovqatni kamaytiring.'],
-['03 — SUV','Yetarlicha suv iching','Kun davomida muntazam suv iching. Ertalab bir stakan suv bilan boshlash yaxshi odat.'],
-['04 — DAM','Sifatli uyqu va dam','Kattalar uchun odatda 7–9 soat uyqu tavsiya etiladi. Uxlashdan oldin ekranlardan uzoqlashing.'],
-['05 — ROHIY HOLAT','Stressni boshqaring','Chuqur nafas, qisqa mashqlar yoki yaqinlar bilan suhbat kayfiyatni yaxshilaydi.']];
-$('#acc').innerHTML=TP.map((t,i)=>`<div class="rv bg-slate-900 border border-white/10 rounded-2xl overflow-hidden">
- <button class="ah w-full text-left p-6 flex items-center justify-between gap-4" aria-expanded="false"><span><span class="block text-green-400 text-sm font-semibold">${t[0]}</span><span class="block text-xl font-bold mt-1">${t[1]}</span></span><span class="ai text-2xl text-green-400 transition">＋</span></button>
- <div class="ap hidden px-6 pb-6 text-gray-400">${t[2]}</div></div>`).join('');
-$$('.ah').forEach(b=>b.onclick=()=>{const p=b.nextElementSibling,o=p.classList.contains('hidden');
- $$('.ap').forEach(x=>x.classList.add('hidden'));$$('.ai').forEach(x=>x.style.transform='');
- if(o){p.classList.remove('hidden');b.querySelector('.ai').style.transform='rotate(45deg)'}});
+const FOODS = [
+  { id: 'egg', k: 78, p: 6, f: 5, c: 1, name: { uz: 'Tuxum (1 dona)', ru: 'Яйцо (1 шт.)', en: 'Egg (1 pc)' } },
+  { id: 'bread', k: 270, p: 8, f: 1, c: 56, name: { uz: 'Non (100 g)', ru: 'Хлеб (100 г)', en: 'Bread (100 g)' } },
+  { id: 'plov', k: 550, p: 18, f: 22, c: 70, name: { uz: 'Osh (1 porsiya)', ru: 'Плов (1 порция)', en: 'Plov (1 serving)' } },
+  { id: 'somsa', k: 280, p: 9, f: 14, c: 28, name: { uz: 'Somsa (1 dona)', ru: 'Самса (1 шт.)', en: 'Samsa (1 pc)' } },
+  { id: 'chicken', k: 165, p: 31, f: 4, c: 0, name: { uz: "Tovuq ko'krak (100 g)", ru: 'Куриная грудка (100 г)', en: 'Chicken breast (100 g)' } },
+  { id: 'buckwheat', k: 110, p: 4, f: 1, c: 21, name: { uz: 'Grechka (100 g, pishgan)', ru: 'Гречка (100 г, варёная)', en: 'Buckwheat (100 g, cooked)' } },
+  { id: 'cottage', k: 120, p: 17, f: 5, c: 3, name: { uz: 'Tvorog (100 g)', ru: 'Творог (100 г)', en: 'Cottage cheese (100 g)' } },
+  { id: 'milk', k: 150, p: 8, f: 6, c: 12, name: { uz: 'Sut 2.5% (250 ml)', ru: 'Молоко 2,5% (250 мл)', en: 'Milk 2.5% (250 ml)' } },
+  { id: 'banana', k: 107, p: 1, f: 0, c: 27, name: { uz: 'Banan (1 dona)', ru: 'Банан (1 шт.)', en: 'Banana (1 pc)' } },
+  { id: 'nuts', k: 196, p: 5, f: 20, c: 4, name: { uz: "Yong'oq (30 g)", ru: 'Грецкий орех (30 г)', en: 'Walnuts (30 g)' } },
+  { id: 'shashlik', k: 250, p: 25, f: 15, c: 2, name: { uz: 'Shashlik (100 g)', ru: 'Шашлык (100 г)', en: 'Shashlik (100 g)' } },
+  { id: 'lagman', k: 520, p: 22, f: 18, c: 65, name: { uz: "Lag'mon (1 porsiya)", ru: 'Лагман (1 порция)', en: 'Lagman (1 serving)' } },
+  { id: 'salad', k: 60, p: 1, f: 4, c: 5, name: { uz: 'Sabzavotli salat (100 g)', ru: 'Овощной салат (100 г)', en: 'Vegetable salad (100 g)' } }
+];
 
-/* Auth */
-const LS={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
-const SS={get(k){try{return JSON.parse(sessionStorage.getItem(k))}catch(e){return null}},set(k,v){try{sessionStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
-const esc=s=>String(s).replace(/[<>&"']/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[c]));
-const hash=async p=>{try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(p));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){return btoa(unescape(encodeURIComponent(p)))}};
-let user=LS.get('fl_session')||SS.get('fl_session');
+const DEFAULT_HABITS = [
+  { id: 'h1', k: 'h_sleep' }, { id: 'h2', k: 'h_water' }, { id: 'h3', k: 'h_steps' }, { id: 'h4', k: 'h_warm' }, { id: 'h5', k: 'h_train' }
+];
 
-function renderAuth(){
- const a=$('#auth');
- if(!user){
-  a.innerHTML=`<button onclick="openAuth('login')" class="border border-white/20 px-4 py-2.5 rounded-xl font-semibold hover:bg-white/10 transition">Kirish</button><button onclick="openAuth('reg')" class="hidden sm:block bg-green-400 text-slate-950 px-5 py-2.5 rounded-xl font-semibold hover:bg-green-300 transition">Boshlash</button>`;return}
- a.innerHTML=`<div class="relative"><button id="ub" class="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full border border-white/15 hover:bg-white/10 transition"><span class="w-8 h-8 rounded-full bg-green-400 text-slate-950 font-bold flex items-center justify-center">${esc(user.name[0].toUpperCase())}</span><span class="hidden sm:inline text-sm">${esc(user.name.split(' ')[0])}</span></button>
- <div id="um" class="hidden absolute right-0 mt-2 w-48 bg-slate-900 border border-white/10 rounded-xl p-2 text-sm shadow-xl"><button onclick="openProfile()" class="w-full text-left px-3 py-2 rounded-lg hover:bg-white/10">👤 Profil</button><button onclick="logout()" class="w-full text-left px-3 py-2 rounded-lg hover:bg-white/10 text-red-400">⎋ Chiqish</button></div></div>`;
- $('#ub').onclick=e=>{e.stopPropagation();$('#um').classList.toggle('hidden')}}
-document.addEventListener('click',()=>{const m=$('#um');if(m)m.classList.add('hidden')});
+/* =========================================================
+   State
+   ========================================================= */
+let favs, hist, lastCalc, water, journal, weights, foods, habitDefs, habitLog, user;
+let randIds = [];
+let speed = 1, player = null, playerIdx = 0, wipeArmed = false;
+const tm = { ms: 0, target: 0, running: false, started: false, id: null };
+const active = new Set();
+const state = { cat: 'all', q: '' };
 
-function openSignup(){openAuth('reg')}
-function openAuth(mode){
- const reg=mode=='reg',inp='w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 outline-none focus:border-green-400';
- openM(`<h3 class="text-2xl font-bold">${reg?'Hisob yaratish 💪':'Xush kelibsiz 👋'}</h3>
- <p class="text-gray-400 text-sm mt-1">${reg?'Bir daqiqada ro‘yxatdan o‘ting.':'Hisobingizga kiring.'}</p>
- <div class="grid grid-cols-2 gap-1 bg-slate-950 rounded-xl p-1 mt-5 text-sm font-medium">
-  <button onclick="openAuth('login')" class="py-2 rounded-lg ${reg?'text-gray-400':'bg-green-400 text-slate-950'}">Kirish</button>
-  <button onclick="openAuth('reg')" class="py-2 rounded-lg ${reg?'bg-green-400 text-slate-950':'text-gray-400'}">Ro‘yxatdan o‘tish</button></div>
- <div class="mt-5 space-y-4">
-  ${reg?`<input id="an" placeholder="Ismingiz" autocomplete="name" class="${inp}">`:''}
-  <input id="ae" type="email" placeholder="Email" autocomplete="email" class="${inp}">
-  <div class="relative"><input id="ap" type="password" placeholder="Parol (kamida 6 belgi)" autocomplete="${reg?'new-password':'current-password'}" class="${inp} pr-12"><button type="button" id="ay" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white" aria-label="Parolni ko‘rsatish">👁</button></div>
-  ${reg?`<select id="ag" class="${inp}"><option>Vazn yo‘qotish</option><option>Mushak orttirish</option><option>Sog‘lom bo‘lish</option><option>Chidamlilik</option></select>`
-   :`<label class="flex items-center gap-2 text-sm text-gray-400"><input id="ar" type="checkbox" checked class="accent-green-400"> Meni eslab qol</label>`}
-  <p id="er" class="text-red-400 text-sm hidden"></p>
-  <button id="ab" class="w-full bg-green-400 text-slate-950 font-semibold py-3 rounded-xl hover:bg-green-300 transition">${reg?'Ro‘yxatdan o‘tish':'Kirish'}</button>
- </div>`);
- const err=m=>{const e=$('#er');e.textContent=m;e.classList.remove('hidden')};
- $('#ay').onclick=()=>{const p=$('#ap');p.type=p.type=='password'?'text':'password'};
- async function submit(){
-  const em=$('#ae').value.trim().toLowerCase(),pw=$('#ap').value,us=LS.get('fl_users')||{};
-  if(!/^\S+@\S+\.\S+$/.test(em))return err('Email noto‘g‘ri');
-  if(pw.length<6)return err('Parol kamida 6 ta belgidan iborat bo‘lsin');
-  if(reg){
-   const n=$('#an').value.trim();if(n.length<2)return err('Ismingizni kiriting');
-   if(us[em])return err('Bu email allaqachon ro‘yxatdan o‘tgan');
-   us[em]={name:n,goal:$('#ag').value,h:await hash(pw)};LS.set('fl_users',us);start(em,us[em],true)
-  }else{
-   const u=us[em];if(!u||u.h!==await hash(pw))return err('Email yoki parol noto‘g‘ri');
-   start(em,u,$('#ar').checked)}}
- $('#ab').onclick=submit;
- $('#mc').onkeydown=e=>{if(e.key=='Enter')submit()};
- setTimeout(()=>$(reg?'#an':'#ae').focus(),50)}
-function start(email,u,rem){
- user={email,name:u.name,goal:u.goal};(rem?LS:SS).set('fl_session',user);
- closeM();renderAuth();toast('👋 Xush kelibsiz, '+u.name+'!')}
-function logout(){
- try{localStorage.removeItem('fl_session');sessionStorage.removeItem('fl_session')}catch(e){}
- user=null;renderAuth();toast('Tizimdan chiqdingiz')}
-function openProfile(){
- openM(`<div class="text-center"><div class="w-20 h-20 mx-auto rounded-full bg-green-400 text-slate-950 text-3xl font-bold flex items-center justify-center">${esc(user.name[0].toUpperCase())}</div>
- <h3 class="text-2xl font-bold mt-4">${esc(user.name)}</h3><p class="text-gray-400 text-sm">${esc(user.email)}</p>
- <p class="mt-3 inline-block text-xs px-3 py-1 rounded-full bg-green-400/10 text-green-400">Maqsad: ${esc(user.goal||'—')}</p></div>
- <div class="mt-6 space-y-3 text-sm">
-  <div class="flex justify-between bg-slate-950 rounded-xl px-4 py-3"><span class="text-gray-400">Qadam</span><span>${pc(S.step,G.step)}%</span></div>
-  <div class="flex justify-between bg-slate-950 rounded-xl px-4 py-3"><span class="text-gray-400">Suv</span><span>${pc(S.water,G.water)}%</span></div>
-  <div class="flex justify-between bg-slate-950 rounded-xl px-4 py-3"><span class="text-gray-400">Uyqu</span><span>${pc(S.sleep,G.sleep)}%</span></div></div>
- <button onclick="closeM();logout()" class="mt-6 w-full border border-red-400/40 text-red-400 py-3 rounded-xl font-semibold hover:bg-red-400/10 transition">Chiqish</button>`)}
-renderAuth();
+function loadAll() {
+  favs = load('favs', []);
+  hist = load('history', []).filter((h) => h && h.goalK);
+  lastCalc = load('last', null);
+  if (lastCalc && !lastCalc.goalK) lastCalc = null;
+  water = load('water', { d: '', n: 0 });
+  if (water.d !== today()) water = { d: today(), n: 0 };
+  journal = load('journal', []);
+  weights = load('weights', []);
+  foods = load('food', []);
+  habitDefs = load('habitdefs', DEFAULT_HABITS);
+  habitLog = load('habitlog', {});
+  user = load('user', null);
+}
 
-/* Reveal + counters */
-const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{threshold:.15});
-$$('.rv').forEach(x=>io.observe(x));
-const co=new IntersectionObserver(es=>es.forEach(x=>{if(!x.isIntersecting)return;co.unobserve(x.target);
- const el=x.target,to=+el.dataset.c,t0=performance.now();
- (function f(t){const p=Math.min(1,(t-t0)/1400);el.textContent=Math.round(to*(1-Math.pow(1-p,3))).toLocaleString('en-US');if(p<1)requestAnimationFrame(f)})(t0)}),{threshold:.5});
-$$('[data-c]').forEach(x=>co.observe(x));
+/* =========================================================
+   Theme and language
+   ========================================================= */
+function setDark(on) { document.documentElement.classList.toggle('dark', on); }
+const savedTheme = store.get('theme');
+setDark(savedTheme ? savedTheme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches);
+$('themeBtn').addEventListener('click', () => {
+  const on = !document.documentElement.classList.contains('dark');
+  setDark(on);
+  store.set('theme', on ? 'dark' : 'light');
+});
+
+function setLang(l) {
+  lang = l;
+  store.set('lang', l);
+  $('lang').value = l;
+  applyI18n();
+  renderAll();
+  renderEx();
+  if (lastCalc) calc(null, true);
+  if (player) openPlayer(playerIdx);
+  startTyping();
+}
+$('lang').addEventListener('change', (e) => setLang(e.target.value));
+
+$('menuBtn').addEventListener('click', () => $('mobileMenu').classList.toggle('hidden'));
+$('mobileMenu').querySelectorAll('a').forEach((a) => a.addEventListener('click', () => $('mobileMenu').classList.add('hidden')));
+
+/* =========================================================
+   Toast, modals, animation engine
+   ========================================================= */
+let toastTimer = null;
+function toast(msg) {
+  const el = $('toast');
+  el.textContent = msg;
+  el.classList.remove('translate-y-[150%]');
+  el.classList.add('translate-y-0');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    el.classList.add('translate-y-[150%]');
+    el.classList.remove('translate-y-0');
+  }, 2200);
+}
+
+function showModal(id, on) {
+  const m = $(id);
+  m.classList.toggle('hidden', !on);
+  m.classList.toggle('flex', on);
+  document.body.classList.toggle('overflow-hidden', on);
+}
+
+function paths(p) {
+  const P = (q) => q[0].toFixed(1) + ' ' + q[1].toFixed(1);
+  return {
+    spine: `M${P(p[0])} L${P(p[1])} L${P(p[2])}`,
+    arm: `M${P(p[1])} L${P(p[3])} L${P(p[4])}`,
+    leg: `M${P(p[2])} L${P(p[5])} L${P(p[6])}`,
+    leg2: `M${P(p[2])} L${P(p[7])} L${P(p[8])}`
+  };
+}
+
+function figMarkup(p) {
+  const d = paths(p);
+  return `<svg viewBox="0 0 300 300" class="h-full w-full text-brand-600 dark:text-brand-400" aria-hidden="true">
+    <line x1="20" y1="270" x2="280" y2="270" class="stroke-slate-400 opacity-60 [stroke-linecap:round] [stroke-width:3px]"/>
+    <path data-k="leg2" d="${d.leg2}" class="fill-none stroke-current opacity-40 [stroke-linecap:round] [stroke-linejoin:round] [stroke-width:11px]"/>
+    <path data-k="leg" d="${d.leg}" class="fill-none stroke-current [stroke-linecap:round] [stroke-linejoin:round] [stroke-width:11px]"/>
+    <path data-k="spine" d="${d.spine}" class="fill-none stroke-current [stroke-linecap:round] [stroke-linejoin:round] [stroke-width:11px]"/>
+    <path data-k="arm" d="${d.arm}" class="fill-none stroke-current [stroke-linecap:round] [stroke-linejoin:round] [stroke-width:11px]"/>
+    <circle data-k="head" cx="${p[0][0]}" cy="${p[0][1]}" r="16" class="fill-current"/>
+  </svg>`;
+}
+
+class Animator {
+  constructor(root, ex, opts = {}) {
+    this.ex = ex;
+    this.c = 0; this.speed = 1; this.playing = true; this.reps = 0; this.lastStep = -1;
+    this.onStep = opts.onStep; this.onRep = opts.onRep; this.onTick = opts.onTick;
+    root.innerHTML = figMarkup(ex.anim[0]);
+    this.spine = root.querySelector('[data-k=spine]');
+    this.arm = root.querySelector('[data-k=arm]');
+    this.leg = root.querySelector('[data-k=leg]');
+    this.leg2 = root.querySelector('[data-k=leg2]');
+    this.head = root.querySelector('[data-k=head]');
+  }
+  reset() { this.c = 0; this.reps = 0; this.lastStep = -1; if (this.onRep) this.onRep(0); }
+  step(dt) {
+    if (this.playing) {
+      this.c += (dt / LEG_MS) * this.speed;
+      if (this.c >= 2) {
+        this.c -= 2;
+        this.reps++;
+        if (this.onRep) this.onRep(this.reps);
+      }
+    }
+    const tt = this.c < 1 ? this.c : 2 - this.c;
+    const e = 0.5 - 0.5 * Math.cos(Math.PI * tt);
+    const [A, B] = this.ex.anim;
+    const p = A.map((q, i) => [q[0] + (B[i][0] - q[0]) * e, q[1] + (B[i][1] - q[1]) * e]);
+    this.draw(p);
+    const s = (this.c < 0.15 || this.c >= 1.85) ? 0 : (this.c < 1 ? 1 : 2);
+    if (s !== this.lastStep) { this.lastStep = s; if (this.onStep) this.onStep(s); }
+    if (this.onTick) this.onTick(this.c / 2);
+  }
+  draw(p) {
+    const d = paths(p);
+    this.spine.setAttribute('d', d.spine);
+    this.arm.setAttribute('d', d.arm);
+    this.leg.setAttribute('d', d.leg);
+    this.leg2.setAttribute('d', d.leg2);
+    this.head.setAttribute('cx', p[0][0].toFixed(1));
+    this.head.setAttribute('cy', p[0][1].toFixed(1));
+  }
+}
+
+let lastTs = null;
+function loop(ts) {
+  const dt = lastTs === null ? 0 : Math.min(ts - lastTs, 100);
+  lastTs = ts;
+  active.forEach((a) => a.step(dt));
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+const hero = new Animator($('heroFig'), EX[0], { onRep: (n) => ($('heroReps').textContent = n) });
+active.add(hero);
+$('heroPlay').addEventListener('click', () => openPlayer(0));
+
+/* =========================================================
+   Exercise player
+   ========================================================= */
+function doseTxt(ex) {
+  return ex.timed ? `${ex.dose[0]} × ${ex.dose[1]} ${t('sec_s')}` : `${ex.dose[0]} × ${ex.dose[1]}`;
+}
+
+function openPlayer(idx) {
+  playerIdx = (idx + EX.length) % EX.length;
+  const ex = EX[playerIdx];
+  if (player) active.delete(player);
+  $('pTitle').textContent = ex.name[lang];
+  $('pSub').textContent = `${ex.muscle[lang]} · ${doseTxt(ex)} · ${t('lvl' + ex.lvl)}`;
+  $('pSteps').innerHTML = ex.steps[lang].map((s, i) => `
+    <li class="flex gap-3 transition duration-300 ${STEP_OFF}">
+      <span class="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-brand-500/15 text-xs font-bold text-brand-600 dark:text-brand-400">${i + 1}</span>
+      <span>${s}</span>
+    </li>`).join('');
+  $('pYt').href = `https://www.youtube.com/results?search_query=${encodeURIComponent(ex.q)}`;
+  $('pYt').textContent = t('p_yt');
+  $('pDisc').textContent = t('p_disc');
+  $('pHint').textContent = t('p_hint');
+  $('pReps').textContent = '0';
+  $('pBar').style.width = '0%';
+  player = new Animator($('pFig'), ex, {
+    onStep: (s) => document.querySelectorAll('#pSteps li').forEach((el, i) => setStep(el, i === s)),
+    onRep: (n) => ($('pReps').textContent = n),
+    onTick: (p) => ($('pBar').style.width = (p * 100).toFixed(1) + '%')
+  });
+  player.speed = speed;
+  active.add(player);
+  setPlayUI();
+  setSpeedUI();
+  showModal('playerModal', true);
+}
+
+function closePlayer() {
+  if (player) { active.delete(player); player = null; }
+  showModal('playerModal', false);
+}
+function setPlayUI() { if (player) $('pPlay').textContent = player.playing ? t('p_pause') : t('p_play'); }
+function setSpeedUI() { document.querySelectorAll('[data-speed]').forEach((b) => setChip(b, +b.dataset.speed === speed)); }
+
+$('pClose').addEventListener('click', closePlayer);
+$('playerModal').addEventListener('click', (e) => { if (e.target.id === 'playerModal') closePlayer(); });
+$('pPlay').addEventListener('click', () => { if (!player) return; player.playing = !player.playing; setPlayUI(); });
+$('pReset').addEventListener('click', () => { if (player) player.reset(); });
+$('pPrev').addEventListener('click', () => openPlayer(playerIdx - 1));
+$('pNext').addEventListener('click', () => openPlayer(playerIdx + 1));
+$('pLog').addEventListener('click', () => {
+  if (!player) return;
+  const ex = player.ex;
+  addJournal(ex.id, ex.dose[0], ex.timed ? ex.dose[1] : (player.reps || ex.dose[1]), 0);
+  toast(t('j_logged'));
+});
+document.querySelectorAll('[data-speed]').forEach((b) => b.addEventListener('click', () => {
+  speed = +b.dataset.speed;
+  if (player) player.speed = speed;
+  setSpeedUI();
+}));
+
+/* =========================================================
+   Calculator
+   ========================================================= */
+const stat = (label, value) =>
+  `<div class="rounded-xl bg-slate-50 p-3 dark:bg-slate-800"><p class="text-xs text-slate-500">${label}</p><p class="mt-0.5 font-bold">${value}</p></div>`;
+
+function countUp(el, to, ms = 1100) {
+  if (!el) return;
+  const start = performance.now();
+  const tick = (now) => {
+    const p = Math.min((now - start) / ms, 1);
+    el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
+    if (p < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+
+function calc(e, silent) {
+  if (e) e.preventDefault();
+  const age = +$('age').value, w = +$('weight').value, h = +$('height').value;
+  const sex = $('sex').value, act = +$('activity').value, goal = $('goal').value;
+  const err = $('formError');
+  if (!(age >= 14 && age <= 100 && w >= 30 && w <= 300 && h >= 120 && h <= 230)) {
+    if (!silent) { err.textContent = t('calc_err'); err.classList.remove('hidden'); }
+    return;
+  }
+  err.classList.add('hidden');
+
+  const hm = h / 100;
+  const bmr = 10 * w + 6.25 * h - 5 * age + (sex === 'male' ? 5 : -161);
+  const tdee = bmr * act;
+  const target = Math.round((tdee + GOALS[goal].adj) / 10) * 10;
+  const bmi = w / (hm * hm);
+  const bmiK = bmi < 18.5 ? 'bmi_low' : bmi < 25 ? 'bmi_norm' : bmi < 30 ? 'bmi_over' : 'bmi_obese';
+  const ideal = [Math.round(18.5 * hm * hm), Math.round(24.9 * hm * hm)];
+
+  let perWeek, minutes, kindK;
+  if (bmi >= 30) { perWeek = 3; minutes = '20–30'; kindK = 't_obese'; }
+  else if (bmi >= 25) { perWeek = 4; minutes = '30–40'; kindK = 't_over'; }
+  else if (bmi < 18.5) { perWeek = 3; minutes = '40–60'; kindK = 't_under'; }
+  else { perWeek = 4; minutes = '40–60'; kindK = 't_normal'; }
+  if (age >= 50) perWeek = Math.min(perWeek, 3);
+  const kind = t(kindK) + (age >= 50 ? '. ' + t('t_50') : '');
+
+  const protein = Math.round(w * 1.6);
+  const fat = Math.round(target * 0.25 / 9);
+  const carbs = Math.max(0, Math.round((target - protein * 4 - fat * 9) / 4));
+  const parts = [
+    { n: t('protein'), g: protein, kcal: protein * 4, s: 'stroke-brand-500', bg: 'bg-brand-500' },
+    { n: t('fat'), g: fat, kcal: fat * 9, s: 'stroke-blue-500', bg: 'bg-blue-500' },
+    { n: t('carb'), g: carbs, kcal: carbs * 4, s: 'stroke-amber-500', bg: 'bg-amber-500' }
+  ];
+  const sum = parts.reduce((s, p) => s + p.kcal, 0) || 1;
+  const C = 2 * Math.PI * 44;
+  let off = 0;
+  const rings = parts.map((p) => {
+    const len = C * p.kcal / sum;
+    const seg = `<circle cx="50" cy="50" r="44" fill="none" stroke-width="12" class="${p.s}" stroke-dasharray="${len.toFixed(2)} ${C.toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}" transform="rotate(-90 50 50)"/>`;
+    off += len;
+    return seg;
+  }).join('');
+  const legend = parts.map((p) => `
+    <li class="flex items-center justify-between gap-3">
+      <span class="flex items-center gap-2"><span class="h-2.5 w-2.5 rounded-full ${p.bg}"></span>${p.n}</span>
+      <span class="font-semibold">${p.g} g · ${Math.round(p.kcal / sum * 100)}%</span>
+    </li>`).join('');
+
+  const days = t('days');
+  const kuch = EX.filter((x) => x.cat === 'kuch'), kardio = EX.filter((x) => x.cat === 'kardio');
+  const plan = Array.from({ length: perWeek }, (_, i) => {
+    const str = i % 2 === 0;
+    const pool = str ? kuch : kardio;
+    return { day: days[i], focus: str ? t('focus_s') : t('focus_c'), items: [0, 1, 2].map((k) => pool[(i + k) % pool.length]) };
+  });
+
+  const stats = [
+    stat(t('bmr'), Math.round(bmr) + ' ' + t('kcal')),
+    stat(t('tdee'), Math.round(tdee) + ' ' + t('kcal')),
+    stat(t('protein'), Math.round(w * 1.6) + '–' + Math.round(w * 2) + ' g'),
+    stat(t('bmi'), bmi.toFixed(1) + ' · ' + t(bmiK)),
+    stat(t('ideal'), ideal[0] + '–' + ideal[1] + ' kg'),
+    stat(t('water_need'), (w * 0.035).toFixed(1) + ' L')
+  ].join('');
+
+  lastCalc = { target, goalK: GOALS[goal].k, perWeek, minutes, w };
+  save('last', lastCalc);
+
+  $('result').innerHTML = `
+  <div class="animate-popin">
+    <div class="flex flex-col justify-between gap-6 md:flex-row md:items-center">
+      <div>
+        <p class="text-sm text-slate-500 dark:text-slate-400">${t('res_kcal')}</p>
+        <div class="mt-1 flex items-end gap-2">
+          <span id="kcalNum" class="text-6xl font-extrabold tabular-nums text-brand-500">0</span>
+          <span class="pb-2 font-semibold text-slate-500">${t('kcal')}</span>
+        </div>
+        <p class="mt-1 text-sm">${t('res_goal')}: <b>${t(GOALS[goal].k)}</b></p>
+      </div>
+      <div class="relative mx-auto h-36 w-36 shrink-0">
+        <svg viewBox="0 0 100 100" class="h-full w-full origin-center animate-ringin [transform-box:fill-box]">${rings}</svg>
+        <div class="absolute inset-0 grid place-items-center text-center text-xs leading-tight text-slate-500">${t('macro')}</div>
+      </div>
+    </div>
+    <ul class="mt-4 space-y-2 text-sm">${legend}</ul>
+    <div class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">${stats}</div>
+
+    <div class="mt-6 rounded-2xl border border-brand-500/30 bg-brand-500/10 p-5">
+      <h3 class="text-lg font-bold">${t('train_title')}</h3>
+      <p class="mt-2 font-semibold">${fmt('per_week', { n: perWeek, m: minutes })}</p>
+      <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">${kind}</p>
+    </div>
+
+    <h3 class="mt-8 text-lg font-bold">${t('week_plan')}</h3>
+    <div class="mt-3 grid gap-3 sm:grid-cols-2">
+      ${plan.map((p) => `
+        <div class="rounded-xl border border-slate-200 p-4 dark:border-slate-700">
+          <p class="text-xs font-semibold text-brand-600 dark:text-brand-400">${p.day} · ${p.focus}</p>
+          <ul class="mt-2 space-y-1 text-sm">${p.items.map((x) => `<li>• ${x.name[lang]}</li>`).join('')}</ul>
+          <p class="mt-2 text-xs text-slate-500">+ ${t('cooldown')} · ${minutes} ${t('min_s')}</p>
+        </div>`).join('')}
+    </div>
+
+    <div class="mt-6 flex flex-wrap gap-2">
+      <button id="saveBtn" type="button" class="rounded-xl bg-brand-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-600">${t('save')}</button>
+      <button id="copyBtn" type="button" class="rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-semibold dark:border-slate-700">${t('copy')}</button>
+    </div>
+    <p class="mt-4 text-xs text-slate-500">${t('calc_note')}</p>
+  </div>`;
+
+  countUp($('kcalNum'), target);
+  renderWater();
+  renderDash();
+}
+
+$('calcForm').addEventListener('submit', (e) => calc(e, false));
+$('result').addEventListener('click', (e) => {
+  if (e.target.closest('#saveBtn')) saveHistory();
+  if (e.target.closest('#copyBtn')) copyResult();
+});
+
+async function copyResult() {
+  if (!lastCalc) return;
+  const text = `FitLife: ${t('res_kcal')}: ${lastCalc.target} ${t('kcal')} (${t(lastCalc.goalK)}). ${fmt('per_week', { n: lastCalc.perWeek, m: lastCalc.minutes })}`;
+  try { await navigator.clipboard.writeText(text); toast(t('toast_copy')); }
+  catch (e) { toast(t('toast_copy_fail')); }
+}
+
+function saveHistory() {
+  if (!lastCalc) return;
+  hist = [{ target: lastCalc.target, goalK: lastCalc.goalK, perWeek: lastCalc.perWeek, minutes: lastCalc.minutes, when: new Date().toLocaleString() }, ...hist].slice(0, 6);
+  save('history', hist);
+  renderHistory();
+  toast(t('toast_saved'));
+}
+
+function renderHistory() {
+  $('histList').innerHTML = hist.map((h, i) => `
+    <li class="flex animate-popin items-start justify-between gap-2 rounded-xl bg-slate-50 p-3 dark:bg-slate-800">
+      <div>
+        <p class="font-bold">${h.target} ${t('kcal')} <span class="font-normal text-slate-500">· ${t(h.goalK)}</span></p>
+        <p class="text-xs text-slate-500">${fmt('hist_line', { n: h.perWeek, m: h.minutes })}</p>
+        <p class="mt-1 text-xs text-slate-400">${h.when}</p>
+      </div>
+      <button type="button" data-del="${i}" class="text-slate-400 hover:text-red-500" aria-label="×">✕</button>
+    </li>`).join('');
+  $('histEmpty').classList.toggle('hidden', hist.length > 0);
+}
+
+$('histList').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-del]');
+  if (!b) return;
+  hist.splice(+b.dataset.del, 1);
+  save('history', hist);
+  renderHistory();
+});
+$('clearHist').addEventListener('click', () => { hist = []; save('history', hist); renderHistory(); });
+
+/* =========================================================
+   Water, timer, habits, 1RM
+   ========================================================= */
+function waterGoal() {
+  return lastCalc && lastCalc.w ? Math.min(16, Math.max(6, Math.ceil(lastCalc.w * 35 / 250))) : 10;
+}
+function renderWater() {
+  const goal = waterGoal();
+  $('glasses').innerHTML = Array.from({ length: goal }, (_, i) => {
+    const on = i < water.n;
+    return `<button type="button" data-g="${i}" class="grid aspect-square place-items-center rounded-xl text-2xl transition duration-300 ${on ? 'bg-sky-100 dark:bg-sky-900/40' : 'bg-slate-100 opacity-60 dark:bg-slate-800'}">${on ? '💧' : '·'}</button>`;
+  }).join('');
+  $('waterText').textContent = `${water.n} / ${goal} ${t('glasses')}`;
+  $('waterBar').style.width = Math.min(100, (water.n / goal) * 100) + '%';
+  $('waterGoalTxt').textContent = `${goal * 250} ml (${goal} ${t('glasses')})`;
+}
+function saveWater() { save('water', water); }
+function addWater(n) {
+  const before = water.n;
+  water.n = Math.max(0, water.n + n);
+  saveWater();
+  renderWater();
+  renderDash();
+  if (before < waterGoal() && water.n >= waterGoal()) toast(t('water_done'));
+}
+$('glasses').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-g]');
+  if (!b) return;
+  const g = +b.dataset.g;
+  water.n = water.n === g + 1 ? g : g + 1;
+  saveWater();
+  renderWater();
+  renderDash();
+});
+$('waterAdd').addEventListener('click', () => addWater(1));
+$('waterSub').addEventListener('click', () => addWater(-1));
+$('waterReset').addEventListener('click', () => { water.n = 0; saveWater(); renderWater(); renderDash(); toast(t('water_cleared')); });
+
+function tmRender() {
+  const sec = tm.target ? Math.ceil(tm.ms / 1000) : Math.floor(tm.ms / 1000);
+  $('clock').textContent = pad(Math.floor(sec / 60)) + ':' + pad(sec % 60);
+}
+function tmLabel() { $('tStart').textContent = tm.running ? t('pause') : tm.started ? t('resume') : t('start'); }
+function tmStop() { tm.running = false; clearInterval(tm.id); tmLabel(); }
+function tmTick() {
+  if (tm.target) {
+    tm.ms -= 100;
+    if (tm.ms <= 0) { tm.ms = 0; tm.started = false; tmStop(); tmRender(); beep(); toast(t('timer_done')); return; }
+  } else {
+    tm.ms += 100;
+  }
+  tmRender();
+}
+function tmToggle() {
+  if (tm.running) { tmStop(); return; }
+  if (tm.target && tm.ms <= 0) tm.ms = tm.target;
+  tm.running = true;
+  tm.started = true;
+  tm.id = setInterval(tmTick, 100);
+  tmLabel();
+}
+function tmPreset(sec) {
+  tmStop();
+  tm.target = sec * 1000;
+  tm.ms = tm.target;
+  tm.started = false;
+  tmRender();
+  renderTimer();
+}
+function renderTimer() {
+  document.querySelectorAll('[data-preset]').forEach((b) => {
+    const s = +b.dataset.preset;
+    b.textContent = s ? `${s} ${t('sec_s')}` : t('sw');
+    setChip(b, s === tm.target / 1000);
+  });
+  tmLabel();
+  tmRender();
+  $('tStart').textContent = tm.running ? t('pause') : tm.started ? t('resume') : t('start');
+  $('tReset').textContent = t('reset');
+}
+function beep() {
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    const c = new AC();
+    [0, 0.45, 0.9].forEach((d) => {
+      const o = c.createOscillator(), g = c.createGain();
+      o.frequency.value = 880; g.gain.value = 0.15;
+      o.connect(g); g.connect(c.destination);
+      o.start(c.currentTime + d); o.stop(c.currentTime + d + 0.25);
+    });
+  } catch (e) {}
+}
+$('tStart').addEventListener('click', tmToggle);
+$('tReset').addEventListener('click', () => { tmStop(); tm.ms = tm.target; tm.started = false; tmRender(); tmLabel(); });
+$('tSet').addEventListener('click', () => {
+  const s = Math.min(3600, Math.max(5, +$('tCustom').value || 0));
+  if (s) tmPreset(s);
+});
+document.querySelectorAll('[data-preset]').forEach((b) => b.addEventListener('click', () => tmPreset(+b.dataset.preset)));
+
+function habitsToday() { return habitLog[today()] || {}; }
+function habitName(h) { return h.k ? t(h.k) : h.name; }
+function renderHabits() {
+  const done = habitsToday();
+  $('habitList').innerHTML = habitDefs.map((h) => `
+    <li class="flex items-center gap-3 rounded-xl bg-slate-50 p-3 dark:bg-slate-800">
+      <button type="button" data-hab="${h.id}" class="grid h-6 w-6 shrink-0 place-items-center rounded-md border-2 text-xs font-bold ${done[h.id] ? 'border-brand-500 bg-brand-500 text-white' : 'border-slate-300 dark:border-slate-600'}">${done[h.id] ? '✓' : ''}</button>
+      <span class="flex-1 ${done[h.id] ? 'text-slate-400 line-through' : ''}">${habitName(h)}</span>
+      <button type="button" data-hdel="${h.id}" class="text-slate-400 hover:text-red-500" aria-label="×">✕</button>
+    </li>`).join('');
+  $('habitStat').textContent = fmt('habit_stats', { d: habitDefs.filter((h) => done[h.id]).length, t: habitDefs.length });
+}
+$('habitList').addEventListener('click', (e) => {
+  const c = e.target.closest('[data-hab]'), x = e.target.closest('[data-hdel]');
+  if (c) {
+    const d = today();
+    const cur = habitLog[d] || {};
+    cur[c.dataset.hab] = !cur[c.dataset.hab];
+    habitLog[d] = cur;
+    save('habitlog', habitLog);
+    renderAll();
+  }
+  if (x) {
+    habitDefs = habitDefs.filter((h) => h.id !== x.dataset.hdel);
+    save('habitdefs', habitDefs);
+    renderAll();
+  }
+});
+$('habitForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const v = $('habitInput').value.trim();
+  if (!v) return;
+  habitDefs = [...habitDefs, { id: 'c' + Date.now(), name: v }];
+  save('habitdefs', habitDefs);
+  $('habitInput').value = '';
+  renderAll();
+});
+
+function rmCalc() {
+  const w = +$('rmW').value, r = +$('rmR').value, out = $('rmOut');
+  if (!(w > 0 && r >= 1 && r <= 30)) { out.innerHTML = ''; return; }
+  const one = r === 1 ? w : w * (1 + r / 30);
+  out.innerHTML = `
+    <p class="text-sm text-slate-500 dark:text-slate-400">${t('rm_res')}</p>
+    <p class="text-3xl font-extrabold text-brand-500">${one.toFixed(1)} kg</p>
+    <div class="mt-3 grid grid-cols-4 gap-2 text-center text-xs">
+      ${[90, 80, 70, 60].map((p) => `<div class="rounded-lg bg-slate-50 p-2 dark:bg-slate-800"><b class="block text-sm">${(one * p / 100).toFixed(1)}</b>${p}%</div>`).join('')}
+    </div>
+    <p class="mt-3 text-xs text-slate-500">${t('rm_note')}</p>`;
+}
+$('rmW').addEventListener('input', rmCalc);
+$('rmR').addEventListener('input', rmCalc);
+
+/* =========================================================
+   Food journal, workout journal, weight tracker
+   ========================================================= */
+function eatenToday() {
+  return foods.filter((f) => f.d === today()).reduce((s, f) => {
+    const it = FOODS.find((x) => x.id === f.f);
+    if (!it) return s;
+    s.kcal += it.k * f.n; s.p += it.p * f.n; s.f += it.f * f.n; s.c += it.c * f.n;
+    return s;
+  }, { kcal: 0, p: 0, f: 0, c: 0 });
+}
+
+function renderFood() {
+  const sel = $('foodSel'), cur = sel.value || FOODS[0].id;
+  sel.innerHTML = FOODS.map((f) => `<option value="${f.id}">${f.name[lang]}</option>`).join('');
+  sel.value = cur;
+  const e = eatenToday();
+  const target = lastCalc ? lastCalc.target : 0;
+  $('fKcal').textContent = Math.round(e.kcal);
+  $('fP').textContent = Math.round(e.p) + ' g';
+  $('fF').textContent = Math.round(e.f) + ' g';
+  $('fC').textContent = Math.round(e.c) + ' g';
+  $('fBar').style.width = target ? Math.min(100, (e.kcal / target) * 100) + '%' : '0%';
+  $('fTxt').textContent = target ? `${Math.round(e.kcal)} / ${target} ${t('kcal')}` : t('dash_none');
+  const list = foods.filter((x) => x.d === today()).slice().reverse();
+  $('fList').innerHTML = list.map((x) => {
+    const it = FOODS.find((f) => f.id === x.f);
+    if (!it) return '';
+    return `<li class="flex items-center justify-between gap-3 rounded-xl bg-slate-50 p-3 dark:bg-slate-800">
+      <span>${it.name[lang]} × ${x.n}</span>
+      <span class="flex items-center gap-3"><span class="font-semibold">${Math.round(it.k * x.n)} ${t('kcal')}</span>
+      <button type="button" data-fdel="${x.id}" class="text-slate-400 hover:text-red-500" aria-label="×">✕</button></span>
+    </li>`;
+  }).join('');
+  $('fEmpty').classList.toggle('hidden', list.length > 0);
+}
+$('foodForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const n = +$('foodQty').value;
+  if (!(n > 0 && n <= 20)) return;
+  foods = [...foods, { id: Date.now(), d: today(), f: $('foodSel').value, n }];
+  save('food', foods);
+  renderAll();
+});
+$('fList').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-fdel]');
+  if (!b) return;
+  foods = foods.filter((x) => String(x.id) !== b.dataset.fdel);
+  save('food', foods);
+  renderAll();
+});
+
+function addJournal(ex, s, r, w) {
+  journal = [...journal, { id: Date.now(), d: today(), ex, s, r, w: w || 0 }];
+  save('journal', journal);
+  renderAll();
+}
+function weekEntries() { const from = addDays(today(), -6); return journal.filter((e) => e.d >= from); }
+
+function renderJournal() {
+  const sel = $('jEx'), cur = sel.value || EX[0].id;
+  sel.innerHTML = EX.map((ex) => `<option value="${ex.id}">${ex.name[lang]}</option>`).join('');
+  sel.value = cur;
+  const wk = weekEntries();
+  $('jWeek').textContent = fmt('j_week', { w: wk.length, d: new Set(wk.map((e) => e.d)).size });
+  $('jList').innerHTML = journal.slice(-40).reverse().map((e) => {
+    const ex = EX.find((x) => x.id === e.ex);
+    return `<li class="flex items-center justify-between gap-3 rounded-xl bg-slate-50 p-3 dark:bg-slate-800">
+      <div>
+        <p class="font-semibold">${ex ? ex.name[lang] : e.ex}</p>
+        <p class="text-xs text-slate-500">${e.d} · ${e.s} × ${e.r}${ex && ex.timed ? ' ' + t('sec_s') : ''}${e.w ? ' · ' + e.w + ' kg' : ''}</p>
+      </div>
+      <button type="button" data-jdel="${e.id}" class="text-slate-400 hover:text-red-500" aria-label="${t('j_del')}">✕</button>
+    </li>`;
+  }).join('');
+  $('jEmpty').classList.toggle('hidden', journal.length > 0);
+}
+$('jForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  addJournal($('jEx').value, +$('jSets').value || 1, +$('jReps').value || 1, +$('jWt').value || 0);
+  $('jWt').value = '';
+});
+$('jList').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-jdel]');
+  if (!b) return;
+  journal = journal.filter((x) => String(x.id) !== b.dataset.jdel);
+  save('journal', journal);
+  renderAll();
+});
+
+function weightChangeText() {
+  if (weights.length < 2) return '';
+  const diff = weights[weights.length - 1].kg - weights[0].kg;
+  return `${t('w_change')}: ${diff > 0 ? '+' : ''}${diff.toFixed(1)} kg`;
+}
+
+function chartSVG(pts) {
+  const W = 600, H = 220, P = 30;
+  const vals = pts.map((p) => p.kg);
+  const min = Math.min(...vals), max = Math.max(...vals);
+  const span = max - min || 1;
+  const lo = min - span * 0.15, hi = max + span * 0.15;
+  const x = (i) => P + (i * (W - 2 * P)) / (pts.length - 1);
+  const y = (v) => H - P - ((v - lo) / (hi - lo)) * (H - 2 * P);
+  const line = pts.map((p, i) => `${x(i).toFixed(1)},${y(p.kg).toFixed(1)}`).join(' ');
+  const dots = pts.map((p, i) => `<circle cx="${x(i).toFixed(1)}" cy="${y(p.kg).toFixed(1)}" r="4" class="fill-brand-500"><title>${p.d}: ${p.kg} kg</title></circle>`).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" class="h-auto w-full text-slate-400" role="img">
+    <line x1="${P}" y1="${H - P}" x2="${W - P}" y2="${H - P}" class="stroke-current opacity-40"/>
+    <polyline points="${line}" class="fill-none stroke-brand-500 [stroke-width:3px]"/>
+    ${dots}
+    <text x="4" y="${(y(max) + 4).toFixed(1)}" class="fill-current text-[11px]">${max.toFixed(1)}</text>
+    <text x="4" y="${(y(min) + 4).toFixed(1)}" class="fill-current text-[11px]">${min.toFixed(1)}</text>
+    <text x="${P}" y="${H - 8}" class="fill-current text-[11px]">${pts[0].d.slice(5)}</text>
+    <text x="${W - P}" y="${H - 8}" text-anchor="end" class="fill-current text-[11px]">${pts[pts.length - 1].d.slice(5)}</text>
+  </svg>`;
+}
+
+function renderWeights() {
+  const pts = weights.slice(-30);
+  $('wChart').innerHTML = pts.length < 2 ? `<p class="py-12 text-center text-sm">${t('w_need2')}</p>` : chartSVG(pts);
+  $('wList').innerHTML = weights.slice(-8).reverse().map((x) => `
+    <li class="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2 dark:bg-slate-800">
+      <span>${x.d}</span>
+      <span class="font-semibold">${x.kg} kg <button type="button" data-wdel="${x.d}" class="ml-2 text-slate-400 hover:text-red-500" aria-label="×">✕</button></span>
+    </li>`).join('');
+  $('wNone').classList.toggle('hidden', weights.length > 0);
+  $('wChange').textContent = weightChangeText();
+  $('wLatest').textContent = weights.length ? `${t('w_last')}: ${weights[weights.length - 1].kg} kg` : '';
+}
+$('wForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const kg = +$('wKg').value;
+  if (!(kg >= 20 && kg <= 400)) return;
+  const d = $('wDate').value || today();
+  weights = weights.filter((x) => x.d !== d).concat({ d, kg }).sort((a, b) => (a.d < b.d ? -1 : 1));
+  save('weights', weights);
+  $('wKg').value = '';
+  toast(t('w_saved'));
+  renderAll();
+});
+$('wList').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-wdel]');
+  if (!b) return;
+  weights = weights.filter((x) => x.d !== b.dataset.wdel);
+  save('weights', weights);
+  renderAll();
+});
+
+/* =========================================================
+   Dashboard and adaptive coach
+   ========================================================= */
+function streak() {
+  const days = new Set(journal.map((e) => e.d));
+  Object.keys(habitLog).forEach((d) => { if (Object.values(habitLog[d]).some(Boolean)) days.add(d); });
+  let d = today();
+  if (!days.has(d)) d = addDays(d, -1);
+  let n = 0;
+  while (days.has(d)) { n++; d = addDays(d, -1); }
+  return n;
+}
+
+function coachText() {
+  if (!lastCalc) return t('c_calc');
+  const e = eatenToday(), target = lastCalc.target, wk = weekEntries().length;
+  if (e.kcal > 0 && e.kcal < target * 0.8) return t('c_low');
+  if (e.kcal > target * 1.1) return t('c_high');
+  if (water.n < waterGoal() / 2) return t('c_water');
+  if (wk < 2) return t('c_train');
+  const s = streak();
+  if (s >= 3) return fmt('c_streak', { n: s });
+  return t('c_good');
+}
+
+function renderDash() {
+  const e = eatenToday(), goal = waterGoal(), wk = weekEntries();
+  const last = weights[weights.length - 1], done = habitsToday();
+  $('dkKcal').textContent = lastCalc ? lastCalc.target : '—';
+  $('dkKcalSub').textContent = lastCalc ? t(lastCalc.goalK) : t('dash_none');
+  $('dkEaten').textContent = Math.round(e.kcal);
+  $('dkEatenSub').textContent = lastCalc ? `/ ${lastCalc.target} ${t('kcal')}` : '';
+  $('dkProt').textContent = `${Math.round(e.p)} g`;
+  $('dkProtSub').textContent = lastCalc ? `/ ${Math.round(lastCalc.w * 1.6)} g` : '';
+  $('dkWater').textContent = `${water.n}/${goal}`;
+  $('dkWeek').textContent = wk.length;
+  $('dkWeekSub').textContent = `${new Set(wk.map((x) => x.d)).size} ${t('dash_days')}`;
+  $('dkStreak').textContent = streak();
+  $('dkWeight').textContent = last ? `${last.kg} kg` : '—';
+  $('dkWeightSub').textContent = weightChangeText();
+  $('dkHabits').textContent = `${habitDefs.filter((h) => done[h.id]).length}/${habitDefs.length}`;
+  $('coachMsg').textContent = coachText();
+}
+
+/* =========================================================
+   Exercise library, random workout, favorites
+   ========================================================= */
+function cardHTML(ex, i) {
+  const fav = favs.includes(ex.id);
+  return `
+  <article class="group flex animate-popin flex-col rounded-2xl border border-slate-200 bg-white p-5 transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-500/20 dark:border-slate-800 dark:bg-slate-900">
+    <div class="relative h-44 overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-800">
+      <div class="absolute inset-0 p-4 transition duration-300 group-hover:scale-105">${figMarkup(ex.anim[0])}</div>
+      <span class="absolute bottom-2 left-2 rounded-full px-2.5 py-1 text-xs font-semibold ${LEVEL_CLS[ex.lvl]}">${t('lvl' + ex.lvl)}</span>
+      <button type="button" data-fav="${ex.id}" class="absolute right-2 top-2 grid h-9 w-9 place-items-center rounded-full bg-white/90 text-lg shadow transition hover:scale-110 dark:bg-slate-900/90">${fav ? '❤️' : '🤍'}</button>
+    </div>
+    <h3 class="mt-4 text-lg font-bold">${ex.name[lang]}</h3>
+    <p class="text-sm text-slate-500">${ex.muscle[lang]}</p>
+    <p class="mt-2 text-sm font-semibold text-brand-600 dark:text-brand-400">${doseTxt(ex)}</p>
+    <button type="button" data-play="${i}" class="mt-4 rounded-xl bg-slate-900 py-2.5 text-sm font-semibold text-white transition hover:opacity-90 dark:bg-white dark:text-slate-900">${t('play_btn')}</button>
+  </article>`;
+}
+
+function renderExercises() {
+  const list = EX.map((ex, i) => ({ ex, i })).filter(({ ex }) => {
+    const catOk = state.cat === 'all' || (state.cat === 'fav' ? favs.includes(ex.id) : ex.cat === state.cat);
+    const qOk = !state.q || (ex.name[lang] + ' ' + ex.muscle[lang]).toLowerCase().includes(state.q);
+    return catOk && qOk;
+  });
+  $('exerciseGrid').innerHTML = list.map(({ ex, i }) => cardHTML(ex, i)).join('');
+  $('emptyMsg').classList.toggle('hidden', list.length > 0);
+}
+
+function shuffleRandom() {
+  randIds = [...EX].sort(() => Math.random() - 0.5).slice(0, 5).map((e) => e.id);
+}
+function renderRandom() {
+  $('randomList').innerHTML = randIds.map((id) => {
+    const i = EX.findIndex((x) => x.id === id);
+    const ex = EX[i];
+    return `<li class="flex items-center justify-between gap-3 rounded-xl border border-slate-200 p-3 dark:border-slate-700">
+      <div><p class="font-semibold">${ex.name[lang]}</p><p class="text-xs text-slate-500">${doseTxt(ex)}</p></div>
+      <button type="button" data-play="${i}" class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-brand-500 text-white" aria-label="Play">▶</button>
+    </li>`;
+  }).join('');
+}
+function renderEx() { renderExercises(); renderRandom(); setFilterChips(); }
+
+function setFilterChips() {
+  document.querySelectorAll('[data-filter]').forEach((b) => setChip(b, b.dataset.filter === state.cat));
+}
+document.querySelectorAll('[data-filter]').forEach((b) => b.addEventListener('click', () => {
+  state.cat = b.dataset.filter;
+  setFilterChips();
+  renderExercises();
+}));
+$('search').addEventListener('input', (e) => {
+  state.q = e.target.value.trim().toLowerCase();
+  renderExercises();
+});
+$('randomBtn').addEventListener('click', () => { shuffleRandom(); renderRandom(); });
+$('randomList').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-play]');
+  if (b) openPlayer(+b.dataset.play);
+});
+$('exerciseGrid').addEventListener('click', (e) => {
+  const p = e.target.closest('[data-play]');
+  if (p) { openPlayer(+p.dataset.play); return; }
+  const f = e.target.closest('[data-fav]');
+  if (!f) return;
+  const id = f.dataset.fav;
+  const on = favs.includes(id);
+  favs = on ? favs.filter((x) => x !== id) : [...favs, id];
+  save('favs', favs);
+  toast(on ? t('fav_rm') : t('fav_add'));
+  if (state.cat === 'fav') renderExercises();
+  else f.textContent = on ? '🤍' : '❤️';
+});
+
+/* =========================================================
+   Data: export, import, print, erase
+   ========================================================= */
+$('exportBtn').addEventListener('click', () => {
+  const data = {};
+  try {
+    Object.keys(localStorage).filter((k) => k.startsWith(KEY)).forEach((k) => { data[k] = localStorage.getItem(k); });
+  } catch (e) {}
+  const blob = new Blob([JSON.stringify({ app: 'fitlife', version: 2, data }, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `fitlife-${today()}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  toast(t('exported'));
+});
+$('importBtn').addEventListener('click', () => $('importFile').click());
+$('importFile').addEventListener('change', async (e) => {
+  const f = e.target.files[0];
+  if (!f) return;
+  try {
+    const obj = JSON.parse(await f.text());
+    if (obj.app !== 'fitlife' || typeof obj.data !== 'object') throw new Error('bad');
+    Object.entries(obj.data).forEach(([k, v]) => {
+      if (k.startsWith(KEY) && typeof v === 'string') { try { localStorage.setItem(k, v); } catch (err) {} }
+    });
+    loadAll();
+    renderAll();
+    renderEx();
+    toast(t('imported'));
+  } catch (err) {
+    toast(t('import_err'));
+  }
+  e.target.value = '';
+});
+$('printBtn').addEventListener('click', () => window.print());
+$('wipeBtn').addEventListener('click', () => {
+  const b = $('wipeBtn');
+  if (!wipeArmed) {
+    wipeArmed = true;
+    b.textContent = t('wipe_sure');
+    setTimeout(() => { wipeArmed = false; b.textContent = t('wipe'); }, 3000);
+    return;
+  }
+  wipeArmed = false;
+  try { Object.keys(localStorage).filter((k) => k.startsWith(KEY)).forEach((k) => localStorage.removeItem(k)); } catch (err) {}
+  loadAll();
+  renderAll();
+  renderEx();
+  toast(t('wiped'));
+});
+
+/* =========================================================
+   Demo login
+   ========================================================= */
+function renderAuth() {
+  $('authBtn').textContent = user ? t('logout') : t('login');
+  $('greet').textContent = user ? `${t('hello')}, ${user.name}` : '';
+}
+$('authBtn').addEventListener('click', () => {
+  if (user) {
+    user = null;
+    store.del('user');
+    renderAuth();
+    toast(t('logged_out'));
+  } else {
+    showModal('authModal', true);
+    $('email').focus();
+  }
+});
+$('closeModal').addEventListener('click', () => showModal('authModal', false));
+$('authModal').addEventListener('click', (e) => { if (e.target.id === 'authModal') showModal('authModal', false); });
+$('loginForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const email = $('email').value.trim();
+  const pass = $('pass').value;
+  if (!/^\S+@\S+\.\S+$/.test(email) || pass.length < 4) {
+    $('loginErr').textContent = t('auth_err');
+    $('loginErr').classList.remove('hidden');
+    return;
+  }
+  user = { name: email.split('@')[0], email };
+  save('user', user);
+  e.target.reset();
+  $('loginErr').classList.add('hidden');
+  showModal('authModal', false);
+  renderAuth();
+  toast(t('welcome'));
+});
+
+/* =========================================================
+   Keyboard, scroll, reveal, counters, nav highlight, typing
+   ========================================================= */
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') { closePlayer(); showModal('authModal', false); return; }
+  if (!player || ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
+  if (e.key === ' ') { e.preventDefault(); $('pPlay').click(); }
+  if (e.key === 'ArrowRight') $('pNext').click();
+  if (e.key === 'ArrowLeft') $('pPrev').click();
+});
+
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  $('progress').style.width = (max > 0 ? (y / max) * 100 : 0) + '%';
+  $('navbar').classList.toggle('shadow-lg', y > 10);
+  const show = y > 600;
+  $('toTop').classList.toggle('opacity-0', !show);
+  $('toTop').classList.toggle('translate-y-4', !show);
+  $('toTop').classList.toggle('pointer-events-none', !show);
+}, { passive: true });
+$('toTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+const revealIO = new IntersectionObserver((entries) => entries.forEach((en) => {
+  if (en.isIntersecting) {
+    en.target.classList.remove('opacity-0', 'translate-y-7');
+    en.target.classList.add('opacity-100', 'translate-y-0');
+    revealIO.unobserve(en.target);
+  }
+}), { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach((el) => revealIO.observe(el));
+
+const countIO = new IntersectionObserver((entries) => entries.forEach((en) => {
+  if (en.isIntersecting) { countUp(en.target, +en.target.dataset.count); countIO.unobserve(en.target); }
+}), { threshold: 0.6 });
+document.querySelectorAll('[data-count]').forEach((el) => countIO.observe(el));
+
+const navIO = new IntersectionObserver((entries) => entries.forEach((en) => {
+  if (!en.isIntersecting) return;
+  document.querySelectorAll('[data-nav]').forEach((a) => {
+    const on = a.getAttribute('href') === '#' + en.target.id;
+    a.classList.toggle('text-brand-600', on);
+    a.classList.toggle('dark:text-brand-400', on);
+  });
+}), { rootMargin: '-45% 0px -50% 0px' });
+['panel', 'hisoblagich', 'vositalar', 'jurnal', 'mashqlar', 'maslahat'].forEach((id) => navIO.observe($(id)));
+
+let typeTimer = null, pi = 0, ci = 0, deleting = false;
+function startTyping() {
+  clearTimeout(typeTimer);
+  pi = 0; ci = 0; deleting = false;
+  const el = $('typed');
+  const tick = () => {
+    const words = ['typed_1', 'typed_2', 'typed_3'].map((k) => t(k));
+    const word = words[pi];
+    if (!deleting) {
+      ci++;
+      el.textContent = word.slice(0, ci);
+      if (ci === word.length) { deleting = true; typeTimer = setTimeout(tick, 1700); }
+      else typeTimer = setTimeout(tick, 80);
+      return;
+    }
+    ci--;
+    el.textContent = word.slice(0, ci);
+    if (ci === 0) { deleting = false; pi = (pi + 1) % 3; typeTimer = setTimeout(tick, 400); }
+    else typeTimer = setTimeout(tick, 40);
+  };
+  tick();
+}
+
+/* =========================================================
+   Rendering and init
+   ========================================================= */
+function renderAll() {
+  renderAuth();
+  renderDash();
+  renderWater();
+  renderTimer();
+  renderHabits();
+  renderFood();
+  renderJournal();
+  renderWeights();
+  renderHistory();
+  rmCalc();
+  $('heroName').textContent = EX[0].name[lang];
+}
+
+$('wDate').value = today();
+$('wDate').max = today();
+loadAll();
+$('lang').value = lang;
+applyI18n();
+shuffleRandom();
+renderAll();
+renderEx();
+calc(null, true);
+tmPreset(0);
+setSpeedUI();
+startTyping();
 </script>
 </body>
 </html>
